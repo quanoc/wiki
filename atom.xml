@@ -3,7 +3,7 @@
   <title>Nova`s Wiki</title>
   
   
-  <link href="/wiki/atom.xml" rel="self"/>
+  <link href="/atom.xml" rel="self"/>
   
   <link href="http://wiki.quartz.ren/"/>
   <updated>2019-01-28T01:49:01.411Z</updated>
@@ -502,30 +502,28 @@
   </entry>
   
   <entry>
-    <title>Scala学习</title>
-    <link href="http://wiki.quartz.ren/wiki/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/Scala/Scala%E5%85%A5%E9%97%A8/"/>
-    <id>http://wiki.quartz.ren/wiki/程序语言/Scala/Scala入门/</id>
+    <title>KNN</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/KNN/"/>
+    <id>http://wiki.quartz.ren/wiki/机器学习/KNN/</id>
     <published>2018-12-02T03:55:57.000Z</published>
     <updated>2019-01-28T01:49:01.411Z</updated>
     
-    <content type="html"><![CDATA[<p>有了java,为什么要用scala.想学scala.</p><p>先了解下它有什么比java更优秀的地方.</p><p>Scala是2001年诞生的一门多范式语言 .设计初衷是要集成面向对象编程和函数式编程的各种特性</p><p><a href="http://www.runoob.com/scala/scala-intro.html" rel="external nofollow noopener noreferrer" target="_blank">Scala 特性</a></p><ul><li>面向对象特性</li><li>函数式编程</li><li>静态类型</li><li>扩展性</li><li>并发</li></ul>]]></content>
+    <content type="html"><![CDATA[<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>简单的说,K-近邻算法采用测量不同特征值之间的距离方法进行分类.</p><p>工作原理: 存在一个样本数据集合, 也称作<strong>训练样本集</strong>, 并且样本集中的每个数据都存在标签(即我们知道样本集中每一数据与所属分类的对应关系),输入没有标签的新数据后.将新数据的每个特征与样本集中数据对应的特征进行比较,然后算法提取样本集中特征最相似数据(最近邻)的分类标签.</p><p>特性: </p><ul><li>优点: 精度高,对异常值不敏感,无数据输入假设</li><li>缺点,计算复杂度高,空间复杂度高</li><li>使用数据范围: 数值型和标称型.</li></ul><h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>使用KNN 分类爱情片和动作片.基于电影中出现的亲吻,打斗出现的次数,使用k-近邻构造程序.</p><p>训练样本集:</p><p>A  打斗镜头: 3     接吻镜头: 104     电影类型 : 爱情片<br>B  打斗镜头: 2     接吻镜头: 100     电影类型 : 爱情片<br>C  打斗镜头: 1     接吻镜头: 81      电影类型 : 爱情片<br>D  打斗镜头: 101   接吻镜头: 10      电影类型 : 动作片<br>E  打斗镜头: 99    接吻镜头: 5       电影类型 : 动作片<br>F  打斗镜头: 98    接吻镜头: 2       电影类型 : 动作片<br>G  打斗镜头: 18    接吻镜头: 90      电影类型 : ?</p><p>已知类型电影 (A,B,C,D,E,F) 与 未知类型电影(G) 的距离如下. 距离怎么定义的?? (二维空间的绝对距离?)</p><p>A   与 G 的距离 : 20.5<br>B   与 G 的距离 : 18.7<br>C   与 G 的距离 : 19.2<br>D   与 G 的距离 : 115.3<br>E   与 G 的距离 : 117.4<br>F   与 G 的距离 : 118.9</p><p>现在得到了样本集中所有电影与未知电影的距离,按照距离递增<strong>排序</strong>, 可以找到k个距离最近的电影.<br>假设k=3, 则最近的三个电影依次为: F,E,D. 而 这三个都是爱情片, 因此我们判断未知电影为爱情片.</p><h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><ul><li>收集数据</li><li>准备数据: 距离计算所需要的数值,最好是结构化的数据格式</li><li>分析数据</li><li>训练算法: k近邻不适用</li><li>测试算法: 计算错误率</li><li>使用算法</li></ul><p>这里只介绍最后的算法使用步骤:实施KNN分类算法.</p><p>主要函数功能为: 使用k-近邻算法将每组数据划分到某个类别中.步骤如下</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">对未知类别属性的数据集中的每个点依次执行以下操作:</span><br><span class="line">1. 计算已知类别数据集中的点与当前点之间的距离</span><br><span class="line">2. 按照距离递增次序排序</span><br><span class="line">3. 选取与当前点距离最小的k个点</span><br><span class="line">4. 确定前k个点所在类别的出现频率 </span><br><span class="line">5. 返回前k个点出现频率最高的类别作为当前点的预测分类.</span><br></pre></td></tr></table></figure><p>python函数如下:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">classify0</span><span class="params">(inX, dataSet, labels, k)</span>:</span></span><br><span class="line">    dataSetSize = dataSet.shape[<span class="number">0</span>]</span><br><span class="line">    // 距离计算</span><br><span class="line">    diffMat = tile(inX, (dataSetSize, <span class="number">1</span>)) - dataSet</span><br><span class="line">    sqDiffMat = diffMat ** <span class="number">2</span></span><br><span class="line">    sqDistances = sqDiffMat.sum(axis=<span class="number">1</span>)</span><br><span class="line">    disstances = sqDistances.argsort()</span><br><span class="line">    classCount=&#123;&#125;</span><br><span class="line">    // 选择距离最小的k个点</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> rang(k):</span><br><span class="line">        voteIlabel = labels[sortedDistIndicies[i]]</span><br><span class="line">        classCount[voteIlabel] = classCount.get(voteIlabel,<span class="number">0</span>) + <span class="number">1</span></span><br><span class="line">    sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(<span class="number">1</span>), reverse=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">return</span> sortedClassCount[<span class="number">0</span>][<span class="number">0</span>]</span><br></pre></td></tr></table></figure><p>其它代码见:<a href="https://github.com/quantumcs/Machine-Learning-In-Action" rel="external nofollow noopener noreferrer" target="_blank">https://github.com/quantumcs/Machine-Learning-In-Action</a></p><h3 id="算法测试"><a href="#算法测试" class="headerlink" title="算法测试"></a>算法测试</h3><h3 id="有关数据收集"><a href="#有关数据收集" class="headerlink" title="有关数据收集"></a>有关数据收集</h3><ul><li>文本数据的转换及处理<br>etc.</li></ul><h3 id="其它的一些应用"><a href="#其它的一些应用" class="headerlink" title="其它的一些应用"></a>其它的一些应用</h3><ul><li>约会网站的配对</li><li>手写识别系统</li></ul><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><h4 id="1-一个简单的模型-存在的问题"><a href="#1-一个简单的模型-存在的问题" class="headerlink" title="1. 一个简单的模型,存在的问题"></a>1. 一个简单的模型,存在的问题</h4><p>现有一个模型, 针对每个新的句子,使用相似度算出与已知样本集中每个句子的相似度. 而已知样本集只有一个类别(也就是说都是负样本). 取最大的相似度值,和阈值比较,大于阈值的定义同一个类别,小于阈值的定为不同类别.</p><p>存在的问题: 1. 没有考虑正样本,这个策略效果肯定存在提升. 2. 另外的提升思路: 对句子做预处理,去除变化较大的实体,降低对相似性的影响.</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;有了java,为什么要用scala.想学scala.&lt;/p&gt;
-&lt;p&gt;先了解下它有什么比java更优秀的地方.&lt;/p&gt;
-&lt;p&gt;Scala是2001年诞生的一门多范式语言 .设计初衷是要集成面向对象编程和函数式编程的各种特性&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www
+        &lt;h3 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h3&gt;&lt;p&gt;简单的说,K-近邻算法采用测量不同特征值之间的距离方法进行分类.&lt;/p&gt;
+&lt;p&gt;工作原理: 存在一个样本数据集合, 也称作&lt;strong&gt;训
       
     
     </summary>
     
-      <category term="程序语言" scheme="http://wiki.quartz.ren/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/"/>
+      <category term="机器学习" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="Scala" scheme="http://wiki.quartz.ren/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/Scala/"/>
     
+      <category term="MchineLearning" scheme="http://wiki.quartz.ren/tags/MchineLearning/"/>
     
   </entry>
   
