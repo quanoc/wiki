@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>Kafak监控 | Nova`s Wiki</title>
+    
+    
+        <meta name="keywords" content="Kafak监控">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="推荐的监控工具kafka-offset-monitor Python实现监控123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafak监控">
+<meta property="og:url" content="http://wiki.quartz.ren/wiki/数据处理/DataStore/Kafka/Kakfa监控/index.html">
+<meta property="og:site_name" content="Nova`s Wiki">
+<meta property="og:description" content="推荐的监控工具kafka-offset-monitor Python实现监控123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-02-23T13:37:57.989Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafak监控">
+<meta name="twitter:description" content="推荐的监控工具kafka-offset-monitor Python实现监控123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Nova`s Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/wiki/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/wiki/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/wiki/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/wiki/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/wiki/css/style.css">
+    <script src="/wiki/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/wiki/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/wiki/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Nova`s Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/wiki/">首页</a>
+                
+                    <a class="main-nav-link" href="/wiki/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/wiki/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/wiki/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/wiki/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/wiki/',
+        CONTENT_URL: '/wiki/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/wiki/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/wiki/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MicroService
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/MicroService/Docker/index/">Docker相关</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/wiki/MicroService/README/"></a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            工具组件
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Builder
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Builder/sbt/">sbt了解</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Docker/002.Docker镜像仓库搭建/">Docker 仓库搭建</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/001.Docker网络/">Docker NetWork</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            IDE
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/IDE/开发工具/">开发工具</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            前端方案
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/前端方案/前端框架记录/"></a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            数据处理
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            DataStore
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Elasticsearch
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES基础/">ES基础</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES介绍/">ES介绍</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES常用api/">ES常用API</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES权限设置/"></a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/Logstash安装/">Logstash安装</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Kafka
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kafka环境搭建/">Kafak环境搭建</a></li>  <li class="file active"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kakfa监控/">Kafak监控</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于kafka的offset存储/">关于kafka的offset存储</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于最近kafka的几个问题/">Kafka问题总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Mongo
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/Mongo基础/">Mongo基础</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/使用python添加数据到Mongo/">使用python添加数据到mongo</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Redis/Redis常用操作/">Redis常用操作</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术文章
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/技术文章/Start/">数据处理相关</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            数据收集
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/数据收集/ELK/">ELK</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            机器学习
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/机器学习/KNN/">KNN</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/Logistic回归/">Logistic回归</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/其他算法/">其他算法</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/利用AdaBoost元算法提高分类性能/">AdaBoost算法</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            程序语言
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Python/Python语法学习笔记/">Python学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/基础操作/">Python常用函数</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/模块安装/">pip 模块安装</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Scala
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Scala/Scala入门/">Scala学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Scala/使用maven构建scala项目/">Scala项目构建</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            软件工程
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            计算机网络
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/计算机网络/TCP-IP及应用问题/">Tcp,Ip及其应用</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            问题
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/问题/关于非技术类的几个问题/"></a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/wiki/Readme/">Hello World</a></li>  <li class="file"><a href="/wiki/wiki/WorkList/"></a></li>  <li class="file"><a href="/wiki/wiki/wiki-start/">Wiki Start</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-数据处理/DataStore/Kafka/Kakfa监控" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/wiki/categories/数据处理/">数据处理</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/wiki/categories/数据处理/DataStore/">DataStore</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/wiki/categories/数据处理/DataStore/Kafka/">Kafka</a>
+    </div>
+
+                        
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/wiki/数据处理/DataStore/Kafka/Kakfa监控/">
+            <time datetime="2018-12-02T03:55:57.000Z" itemprop="datePublished">2018-12-02</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/quantumcs/wiki/raw/master/source/_posts/数据处理/DataStore/Kafka/Kakfa监控.md" rel="external nofollow noopener noreferrer" target="_blank"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/quantumcs/wiki/edit/master/source/_posts/数据处理/DataStore/Kafka/Kakfa监控.md" rel="external nofollow noopener noreferrer" target="_blank"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/quantumcs/wiki/commits/master/source/_posts/数据处理/DataStore/Kafka/Kakfa监控.md" rel="external nofollow noopener noreferrer" target="_blank"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Kafak监控
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+        
+        
+            <h3 id="推荐的监控工具"><a href="#推荐的监控工具" class="headerlink" title="推荐的监控工具"></a>推荐的监控工具</h3><p><a href="https://github.com/Morningstar/kafka-offset-monitor" rel="external nofollow noopener noreferrer" target="_blank">kafka-offset-monitor</a></p>
+<h3 id="Python实现监控"><a href="#Python实现监控" class="headerlink" title="Python实现监控"></a>Python实现监控</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br></pre></td><td class="code"><pre><span class="line">topics = [<span class="string">'heimdallr-dev'</span>]</span><br><span class="line"><span class="comment"># 要监控的groupid</span></span><br><span class="line">monitor_group_ids = [<span class="string">'heimdallr'</span>]</span><br><span class="line"><span class="comment"># broker-list</span></span><br><span class="line">servers = <span class="string">'localhost:9092'</span></span><br><span class="line"><span class="comment"># 监控数据上报间隔 秒</span></span><br><span class="line">time_interval = <span class="number">10</span></span><br><span class="line"><span class="comment"># 历史全量数据上报间隔</span></span><br><span class="line">history_time_interval = <span class="number">5</span> * <span class="number">60</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> kafka.client <span class="keyword">import</span> KafkaClient</span><br><span class="line"><span class="keyword">from</span> kafka.protocol.commit <span class="keyword">import</span> OffsetFetchRequest_v1, OffsetFetchResponse_v1, OffsetFetchRequest_v0, \</span><br><span class="line">    OffsetFetchResponse_v0</span><br><span class="line"><span class="keyword">from</span> kafka.protocol.offset <span class="keyword">import</span> OffsetRequest_v0, OffsetResponse_v0</span><br><span class="line"></span><br><span class="line"><span class="comment">#from monitor_constants import *</span></span><br><span class="line"></span><br><span class="line">duration = <span class="number">0</span></span><br><span class="line">client = <span class="keyword">None</span></span><br><span class="line">conn = <span class="keyword">None</span></span><br><span class="line">partition_cache = &#123;&#125;</span><br><span class="line">brokers_cache = []</span><br><span class="line">kafka_type = [<span class="string">'heimdallr'</span>]</span><br><span class="line">zk_type = []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_brokers</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> brokers_cache:</span><br><span class="line">        brokers = client.cluster.brokers()</span><br><span class="line">        <span class="keyword">if</span> brokers:</span><br><span class="line">            brokers_cache.extend([x.nodeId <span class="keyword">for</span> x <span class="keyword">in</span> brokers])</span><br><span class="line">    <span class="keyword">return</span> brokers_cache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_partitions</span><span class="params">(topic)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> partition_cache <span class="keyword">or</span> topic <span class="keyword">not</span> <span class="keyword">in</span> partition_cache:</span><br><span class="line">        partitions = client.cluster.available_partitions_for_topic(topic)</span><br><span class="line">        <span class="keyword">if</span> partitions:</span><br><span class="line">            partition_cache[topic] = [x <span class="keyword">for</span> x <span class="keyword">in</span> partitions]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">    <span class="keyword">return</span> partition_cache[topic]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_logsize</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        获取topic 下每个partition的logsize(各个broker的累加)</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    tp = &#123;&#125;  <span class="comment"># topic : partition_dict</span></span><br><span class="line">    brokers = get_brokers()</span><br><span class="line">    <span class="keyword">for</span> topic <span class="keyword">in</span> topics:</span><br><span class="line">        partitions = get_partitions(topic)</span><br><span class="line">        pl = &#123;&#125;  <span class="comment"># partition : logsize</span></span><br><span class="line">        <span class="keyword">for</span> broker <span class="keyword">in</span> brokers:</span><br><span class="line">            <span class="comment"># 这里取笛卡尔积可能有问题,但是不影响parse中解析了</span></span><br><span class="line">            <span class="keyword">for</span> partition <span class="keyword">in</span> partitions:</span><br><span class="line">                client.send(broker, OffsetRequest_v0(replica_id=<span class="number">-1</span>, topics=[(topic, [(partition, <span class="number">-1</span>, <span class="number">1</span>)])]))</span><br><span class="line">                responses = client.poll()</span><br><span class="line">                pdict = parse_logsize(topic, partition, responses)</span><br><span class="line">                append(pl, pdict)</span><br><span class="line">        tp[topic] = pl</span><br><span class="line">    <span class="keyword">return</span> tp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">append</span><span class="params">(rdict, pdict)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> rdict:</span><br><span class="line">        <span class="comment"># 已经有记录,累加</span></span><br><span class="line">        <span class="keyword">for</span> k, v <span class="keyword">in</span> pdict.items():</span><br><span class="line">            <span class="keyword">if</span> k <span class="keyword">in</span> rdict:</span><br><span class="line">                rdict[k] = rdict[k] + v</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                rdict[k] = v</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        rdict.update(pdict)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_logsize</span><span class="params">(t, p, responses)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        单个broker中单个partition的logsize</span></span><br><span class="line"><span class="string">    :param responses:</span></span><br><span class="line"><span class="string">    :param p:</span></span><br><span class="line"><span class="string">    :param t:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">for</span> response <span class="keyword">in</span> responses:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> isinstance(response, OffsetResponse_v0):</span><br><span class="line">            <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">        tps = response.topics</span><br><span class="line">        topic = tps[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line">        partition_list = tps[<span class="number">0</span>][<span class="number">1</span>]</span><br><span class="line">        partition = partition_list[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line">        <span class="comment"># 异步poll来的数据可能不准</span></span><br><span class="line">        <span class="keyword">if</span> topic == t <span class="keyword">and</span> partition == p <span class="keyword">and</span> partition_list[<span class="number">0</span>][<span class="number">1</span>] == <span class="number">0</span>:</span><br><span class="line">            logsize_list = partition_list[<span class="number">0</span>][<span class="number">2</span>]</span><br><span class="line">            logsize = logsize_list[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">return</span> &#123;partition: logsize&#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_offsets</span><span class="params">(t, responses)</span>:</span></span><br><span class="line">    dr = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> response <span class="keyword">in</span> responses:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> isinstance(response, (OffsetFetchResponse_v1, OffsetFetchResponse_v0)):</span><br><span class="line">            <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">        tps = response.topics</span><br><span class="line">        topic = tps[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line">        partition_list = tps[<span class="number">0</span>][<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">if</span> topic == t:</span><br><span class="line">            <span class="keyword">for</span> partition_tunple <span class="keyword">in</span> partition_list:</span><br><span class="line">                <span class="keyword">if</span> partition_tunple[<span class="number">3</span>] == <span class="number">0</span>:</span><br><span class="line">                    offset = partition_tunple[<span class="number">1</span>]</span><br><span class="line">                    dr[partition_tunple[<span class="number">0</span>]] = offset</span><br><span class="line">    <span class="keyword">return</span> dr</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_offsets</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># &#123;gid: dict&#125;</span></span><br><span class="line">    gd = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> gid <span class="keyword">in</span> monitor_group_ids:</span><br><span class="line">        td = &#123;&#125;  <span class="comment"># &#123;topic:dict&#125;</span></span><br><span class="line">        <span class="keyword">for</span> topic <span class="keyword">in</span> topics:</span><br><span class="line">            pd = &#123;&#125;  <span class="comment"># &#123;partition:dict&#125;</span></span><br><span class="line">            <span class="keyword">for</span> broker <span class="keyword">in</span> get_brokers():</span><br><span class="line">                partitions = get_partitions(topic)</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> partitions:</span><br><span class="line">                    <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    responses = optionnal_send(broker, gid, topic, partitions)</span><br><span class="line">                    dr = parse_offsets(topic, responses)</span><br><span class="line">                    append(pd, dr)</span><br><span class="line">            td[topic] = pd</span><br><span class="line">        gd[gid] = td</span><br><span class="line">    <span class="keyword">return</span> gd</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">optionnal_send</span><span class="params">(broker, gid, topic, partitions)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> gid <span class="keyword">in</span> kafka_type:</span><br><span class="line">        <span class="keyword">return</span> kafka_send(broker, gid, topic, partitions)</span><br><span class="line">    <span class="keyword">elif</span> gid <span class="keyword">in</span> zk_type:</span><br><span class="line">        <span class="keyword">return</span> zk_send(broker, gid, topic, partitions)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        responses = zk_send(broker, gid, topic, partitions)</span><br><span class="line">        dct = parse_offsets(topic, responses)</span><br><span class="line">        <span class="keyword">if</span> is_suitable(dct):</span><br><span class="line">            zk_type.append(gid)</span><br><span class="line">            <span class="keyword">return</span> responses</span><br><span class="line">        responses = kafka_send(broker, gid, topic, partitions)</span><br><span class="line">        dct = parse_offsets(topic, responses)</span><br><span class="line">        <span class="keyword">if</span> is_suitable(dct):</span><br><span class="line">            kafka_type.append(gid)</span><br><span class="line">        <span class="keyword">return</span> responses</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_suitable</span><span class="params">(dct)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> dct.values():</span><br><span class="line">        <span class="keyword">if</span> x != <span class="number">-1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kafka_send</span><span class="params">(broker, gid, topic, partitions)</span>:</span></span><br><span class="line">    client.send(broker, OffsetFetchRequest_v1(consumer_group=gid, topics=[(topic, partitions)]))</span><br><span class="line">    <span class="keyword">return</span> client.poll()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">zk_send</span><span class="params">(broker, gid, topic, partitions)</span>:</span></span><br><span class="line">    client.send(broker, OffsetFetchRequest_v0(consumer_group=gid, topics=[(topic, partitions)]))</span><br><span class="line">    <span class="keyword">return</span> client.poll()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">do_task</span><span class="params">()</span>:</span></span><br><span class="line">    offset_dict = get_offsets()</span><br><span class="line">    <span class="comment">#print (offset_dict)</span></span><br><span class="line">    logsize_dict = get_logsize()</span><br><span class="line">    <span class="comment">#print (logsize_dict)</span></span><br><span class="line">    <span class="keyword">print</span> (<span class="string">'----------kafka monitor, info:-------------'</span>)</span><br><span class="line">    <span class="keyword">for</span> gk, gv <span class="keyword">in</span> offset_dict.items():</span><br><span class="line">        <span class="keyword">for</span> tk, tv <span class="keyword">in</span> gv.items():</span><br><span class="line">            <span class="keyword">for</span> pk, pv <span class="keyword">in</span> tv.items():</span><br><span class="line">                <span class="keyword">if</span> logsize_dict <span class="keyword">and</span> tk <span class="keyword">in</span> logsize_dict:</span><br><span class="line">                    dr = logsize_dict[tk]  <span class="comment"># partition:logsize</span></span><br><span class="line">                    <span class="keyword">if</span> dr <span class="keyword">and</span> pk <span class="keyword">in</span> dr:</span><br><span class="line">                        param = (gk, tk, pk, pv, dr[pk],</span><br><span class="line">                                 time.strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>, time.localtime(time.time())))</span><br><span class="line">                        print(param)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    client = KafkaClient(bootstrap_servers=servers, request_timeout_ms=<span class="number">3000</span>)</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        do_task()</span><br><span class="line">        time.sleep(time_interval)</span><br><span class="line">        duration += time_interval</span><br></pre></td></tr></table></figure>
+<p>参考:<a href="https://my.oschina.net/ktlb/blog/863308" rel="external nofollow noopener noreferrer" target="_blank">https://my.oschina.net/ktlb/blog/863308</a></p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/wiki/程序语言/Scala/使用maven构建scala项目/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    Scala项目构建
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/wiki/数据处理/DataStore/Kafka/关于kafka的offset存储/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">关于kafka的offset存储</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Nova &copy; 2019 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/wiki/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/wiki/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/wiki/js/main.js"></script>
+
+    </div>
+</body>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>Logstash安装 | Nova`s Wiki</title>
+    
+    
+        <meta name="keywords" content="Logstash安装">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="logstash是做数据采集的，类似于flume。 官网logstash介绍 下载地址 解压后执行一下命令,查看效果: 1bin/logstash -e &amp;apos;input &amp;#123; stdin &amp;#123; &amp;#125; &amp;#125; output &amp;#123; stdout &amp;#123;&amp;#125; &amp;#125;&amp;apos; 安装logstash-input-jdbc参考 logsta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Logstash安装">
+<meta property="og:url" content="http://wiki.quartz.ren/wiki/数据处理/DataStore/Elasticsearch/Logstash安装/index.html">
+<meta property="og:site_name" content="Nova`s Wiki">
+<meta property="og:description" content="logstash是做数据采集的，类似于flume。 官网logstash介绍 下载地址 解压后执行一下命令,查看效果: 1bin/logstash -e &amp;apos;input &amp;#123; stdin &amp;#123; &amp;#125; &amp;#125; output &amp;#123; stdout &amp;#123;&amp;#125; &amp;#125;&amp;apos; 安装logstash-input-jdbc参考 logsta">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-02-23T13:37:57.988Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Logstash安装">
+<meta name="twitter:description" content="logstash是做数据采集的，类似于flume。 官网logstash介绍 下载地址 解压后执行一下命令,查看效果: 1bin/logstash -e &amp;apos;input &amp;#123; stdin &amp;#123; &amp;#125; &amp;#125; output &amp;#123; stdout &amp;#123;&amp;#125; &amp;#125;&amp;apos; 安装logstash-input-jdbc参考 logsta">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Nova`s Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/wiki/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/wiki/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/wiki/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/wiki/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/wiki/css/style.css">
+    <script src="/wiki/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/wiki/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/wiki/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Nova`s Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/wiki/">首页</a>
+                
+                    <a class="main-nav-link" href="/wiki/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/wiki/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/wiki/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/wiki/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/wiki/',
+        CONTENT_URL: '/wiki/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/wiki/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/wiki/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MicroService
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/MicroService/Docker/index/">Docker相关</a></li>  </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/wiki/MicroService/README/"></a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            工具组件
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Builder
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Builder/sbt/">sbt了解</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Docker/002.Docker镜像仓库搭建/">Docker 仓库搭建</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/001.Docker网络/">Docker NetWork</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            IDE
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/IDE/开发工具/">开发工具</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            前端方案
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/前端方案/前端框架记录/"></a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            数据处理
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            DataStore
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Elasticsearch
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES基础/">ES基础</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES介绍/">ES介绍</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES常用api/">ES常用API</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES权限设置/"></a></li>  <li class="file active"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/Logstash安装/">Logstash安装</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kafka
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kafka环境搭建/">Kafak环境搭建</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kakfa监控/">Kafak监控</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于kafka的offset存储/">关于kafka的offset存储</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于最近kafka的几个问题/">Kafka问题总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Mongo
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/Mongo基础/">Mongo基础</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/使用python添加数据到Mongo/">使用python添加数据到mongo</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Redis/Redis常用操作/">Redis常用操作</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术文章
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/技术文章/Start/">数据处理相关</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            数据收集
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/数据收集/ELK/">ELK</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            机器学习
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/机器学习/KNN/">KNN</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/Logistic回归/">Logistic回归</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/其他算法/">其他算法</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/利用AdaBoost元算法提高分类性能/">AdaBoost算法</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            程序语言
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Python/Python语法学习笔记/">Python学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/基础操作/">Python常用函数</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/模块安装/">pip 模块安装</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Scala
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Scala/Scala入门/">Scala学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Scala/使用maven构建scala项目/">Scala项目构建</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            软件工程
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            计算机网络
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/计算机网络/TCP-IP及应用问题/">Tcp,Ip及其应用</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            问题
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/问题/关于非技术类的几个问题/"></a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/wiki/Readme/">Hello World</a></li>  <li class="file"><a href="/wiki/wiki/WorkList/"></a></li>  <li class="file"><a href="/wiki/wiki/wiki-start/">Wiki Start</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-数据处理/DataStore/Elasticsearch/Logstash安装" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/wiki/categories/数据处理/">数据处理</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/wiki/categories/数据处理/DataStore/">DataStore</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/wiki/categories/数据处理/DataStore/Elasticsearch/">Elasticsearch</a>
+    </div>
+
+                        
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/Logstash安装/">
+            <time datetime="2018-12-15T17:55:57.000Z" itemprop="datePublished">2018-12-16</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href="https://github.com/quantumcs/wiki/raw/master/source/_posts/数据处理/DataStore/Elasticsearch/Logstash安装.md" rel="external nofollow noopener noreferrer" target="_blank"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/quantumcs/wiki/edit/master/source/_posts/数据处理/DataStore/Elasticsearch/Logstash安装.md" rel="external nofollow noopener noreferrer" target="_blank"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href="https://github.com/quantumcs/wiki/commits/master/source/_posts/数据处理/DataStore/Elasticsearch/Logstash安装.md" rel="external nofollow noopener noreferrer" target="_blank"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Logstash安装
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+        
+        
+            <p>logstash是做数据采集的，类似于flume。</p>
+<p><a href="https://www.elastic.co/cn/products/logstash" rel="external nofollow noopener noreferrer" target="_blank">官网logstash介绍</a></p>
+<p><a href="https://www.elastic.co/downloads/past-releases/logstash-6-3-2" rel="external nofollow noopener noreferrer" target="_blank">下载地址</a></p>
+<p>解压后执行一下命令,查看效果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/logstash -e &apos;input &#123; stdin &#123; &#125; &#125; output &#123; stdout &#123;&#125; &#125;&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="安装logstash-input-jdbc"><a href="#安装logstash-input-jdbc" class="headerlink" title="安装logstash-input-jdbc"></a>安装logstash-input-jdbc</h3><p><a href="使用logstash-6.2.2和logstash-input-jdbc插件实现mysql数据同步到Elasticsearch">参考</a></p>
+<p>logstash-input-jdbc插件是logstash 的一个个插件。</p>
+<p>使用ruby语言开发. 安装gem, 替换淘宝镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">安装gem</span><br><span class="line">sudo apt install gem</span><br><span class="line">sudo apt install ruby</span><br><span class="line">gem -v</span><br><span class="line">gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/</span><br><span class="line">gem sources -l</span><br></pre></td></tr></table></figure>
+<p><a href="https://gems.ruby-china.com/" rel="external nofollow noopener noreferrer" target="_blank">RubyGems镜像站</a></p>
+<ul>
+<li>查看logstash可用插件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/logstash-plugin list --verbose</span><br></pre></td></tr></table></figure>
+<p>以上找到对应的版本. 查看相应的文档<a href="https://www.elastic.co/guide/en/logstash-versioned-plugins/current/v4.3.9-plugins-inputs-jdbc.html" rel="external nofollow noopener noreferrer" target="_blank">https://www.elastic.co/guide/en/logstash-versioned-plugins/current/v4.3.9-plugins-inputs-jdbc.html</a></p>
+<ul>
+<li>安装命令</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/logstash-plugin install logstash-input-jdbc</span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>实现mysql数据同步到Elasticsearch</p>
+<p>需要一个mysql驱动包，sql文件,以及conf配置文件 </p>
+<ul>
+<li>sql文件</li>
+</ul>
+<p>bank_sync.sql</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">        t.id,</span><br><span class="line">        t.<span class="string">`code`</span>,</span><br><span class="line">        t.<span class="string">`name`</span>,</span><br><span class="line">        t.per_day_limit</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">        tb_bank_type t</span><br></pre></td></tr></table></figure>
+<ul>
+<li>mysql.conf文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line"></span><br><span class="line">    jdbc &#123;</span><br><span class="line">      # mysql jdbc connection string to our backup databse</span><br><span class="line">      jdbc_connection_string =&gt; &quot;jdbc:mysql://127.0.0.1:3306/carinsurance&quot;</span><br><span class="line">      # the user we wish to excute our statement as</span><br><span class="line">      jdbc_user =&gt; &quot;carinsurance&quot;</span><br><span class="line">      jdbc_password =&gt; &quot;123456&quot;</span><br><span class="line">      # the path to our downloaded jdbc driver</span><br><span class="line">      jdbc_driver_library =&gt; &quot;/opt/elasticsearch/logstash-6.2.2/sql/mysql-connector-java-5.1.40.jar&quot;</span><br><span class="line">      # the name of the driver class for mysql</span><br><span class="line">      jdbc_driver_class =&gt; &quot;com.mysql.jdbc.Driver&quot;</span><br><span class="line">      jdbc_paging_enabled =&gt; &quot;true&quot;</span><br><span class="line">      jdbc_page_size =&gt; &quot;50000&quot;</span><br><span class="line">      statement_filepath =&gt; &quot;/opt/elasticsearch/logstash-6.2.2/sql/bank_sync.sql&quot;</span><br><span class="line">      schedule =&gt; &quot;*/1 * * * *&quot;</span><br><span class="line">      type =&gt; &quot;jdbc&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line">    json &#123;</span><br><span class="line">        source =&gt; &quot;message&quot;</span><br><span class="line">        remove_field =&gt; [&quot;message&quot;]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">        hosts =&gt; &quot;127.0.0.1:9200&quot;</span><br><span class="line">        index =&gt; &quot;bank&quot;</span><br><span class="line">        document_id =&gt; &quot;%&#123;id&#125;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    stdout &#123;</span><br><span class="line">        codec =&gt; json_lines</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上面配置文件中的sql文件和mysql驱动注意路径正确</p>
+</blockquote>
+<ul>
+<li>启动logstash</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/logstash -f mysql.conf </span><br><span class="line">后台启动: nohup ./logstash -f mysql.conf &gt; /dev/null 2&gt;&amp;1 &amp;</span><br><span class="line">nohup bin/logstash -f sync-data/mysql.conf  &amp;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意: es需要外网访问,同kibana,需要配置如下:</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">network.host: 0.0.0.0</span><br></pre></td></tr></table></figure>
+<p>配置以上后出现问题:</p>
+<ul>
+<li>系统最大文件描述符限制,最大虚拟内存限制</li>
+</ul>
+<p>解决:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/security/limits.conf </span><br><span class="line">将65535 改为65536</span><br><span class="line">root用户执行以下:</span><br><span class="line">vi /etc/sysctl.conf </span><br><span class="line">添加一下配置</span><br><span class="line">vm.max_map_count=655360</span><br><span class="line">使其生效</span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p><a href="https://yq.aliyun.com/articles/276730" rel="external nofollow noopener noreferrer" target="_blank">【技术实验】mysql准实时同步数据到Elasticsearch</a></p>
+<p><a href="https://www.cnblogs.com/zuolun2017/p/8082996.html" rel="external nofollow noopener noreferrer" target="_blank">全文搜索引擎 Elasticsearch （三）logstash-input-jdbc同步数据 到elasticsearch</a></p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES介绍/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    ES介绍
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/wiki/数据处理/DataStore/Redis/Redis常用操作/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Redis常用操作</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Nova &copy; 2019 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/wiki/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/wiki/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/wiki/js/main.js"></script>
+
+    </div>
+</body>
