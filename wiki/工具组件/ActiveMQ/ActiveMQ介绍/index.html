@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>ActiveMQ介绍 | Nova`s Wiki</title>
+    
+    
+        <meta name="keywords" content="activemq,mq">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="使用方式（嵌入模式、集群模式） 概念：具体某一个队列、整个队列的创建、使用。一个broker 连接方式（连接池？） 支持协议 几个端口作用、以及监控实现 消息模式（发送订阅和点对点消息） 与其它消息队列比较  消息确认机制（事物）  ActiveMQ的设置消息时长，事务，确认机制 ，持久化(六)（http://blog.csdn.net/u014401141/article/details/54">
+<meta name="keywords" content="activemq,mq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ActiveMQ介绍">
+<meta property="og:url" content="http://wiki.quartz.ren/wiki/工具组件/ActiveMQ/ActiveMQ介绍/index.html">
+<meta property="og:site_name" content="Nova`s Wiki">
+<meta property="og:description" content="使用方式（嵌入模式、集群模式） 概念：具体某一个队列、整个队列的创建、使用。一个broker 连接方式（连接池？） 支持协议 几个端口作用、以及监控实现 消息模式（发送订阅和点对点消息） 与其它消息队列比较  消息确认机制（事物）  ActiveMQ的设置消息时长，事务，确认机制 ，持久化(六)（http://blog.csdn.net/u014401141/article/details/54">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-02-24T02:44:27.943Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ActiveMQ介绍">
+<meta name="twitter:description" content="使用方式（嵌入模式、集群模式） 概念：具体某一个队列、整个队列的创建、使用。一个broker 连接方式（连接池？） 支持协议 几个端口作用、以及监控实现 消息模式（发送订阅和点对点消息） 与其它消息队列比较  消息确认机制（事物）  ActiveMQ的设置消息时长，事务，确认机制 ，持久化(六)（http://blog.csdn.net/u014401141/article/details/54">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Nova`s Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/wiki/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/wiki/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/wiki/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/wiki/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/wiki/css/style.css">
+    <script src="/wiki/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/wiki/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?9088151460061a7c449bb9d5a3209fbc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/wiki/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Nova`s Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/wiki/">首页</a>
+                
+                    <a class="main-nav-link" href="/wiki/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/wiki/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/wiki/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/wiki/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/wiki/',
+        CONTENT_URL: '/wiki/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/wiki/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/wiki/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MicroService
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术框架
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Netty
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/Netty/Netty学习目录/">Netty学习目录</a></li>  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/Netty/读写事件流程分析与相关API/">读写事件流程分析与相关API</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            SpringBoot
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/SpringBoot/Readme/">SpringBoot</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            工具组件
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            ActiveMQ
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file active"><a href="/wiki/wiki/工具组件/ActiveMQ/ActiveMQ介绍/">ActiveMQ介绍</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/ActiveMQ/ActiveMQ分享/">ActiveMQ分享</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Builder
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Builder/sbt/">sbt了解</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Docker/1.Ubuntu16安装Docker环境/">Ubuntu16安装Docker环境</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/2.Docker环境使用MySQL/">Docker环境Mysql使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/3.Docker环境其他中间件使用/">Docker环境其他中间件使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/4.Dockerfile语法/">Dockerfile语法</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/5.Docker镜像仓库搭建/">Docker 仓库搭建</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/6.Docker网络/">Docker NetWork</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/7.系统镜像/">系统镜像</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/8.Docker其他/">Docker相关</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Elasticsearch
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Elasticsearch/1.ES环境搭建/">ES环境搭建</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Elasticsearch/Python客户端创建索引/">Python客户端创建索引</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            IDE
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/IDE/Git学习/">Jenkins项目常用配置</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/IDE/开发工具/">开发工具</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Jenkins
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/1.Jenkins认识/">Jenkins认识</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/2.Jenkins安装配置/">Jenkins安装配置</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/3.Jenkins插件使用/">Jenkins插件使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/4.Jenkins项目常用配置/">Jenkins项目常用配置</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            前端方案
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/前端方案/前端框架记录/">前端框架</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            数据处理
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            DataStore
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Elasticsearch
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES介绍/">ES介绍</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES基础/">ES基础</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES权限设置/"></a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES常用api/">ES常用API</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/Logstash安装/">Logstash安装</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Hadoop
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Hadoop/Hadoop学习资料/">Hadoop学习资料</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kafka
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kafka环境搭建/">Kafak环境搭建</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kakfa监控/">Kafak监控</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于kafka的offset存储/">关于kafka的offset存储</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于最近kafka的几个问题/">Kafka问题总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Mongo
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/使用python添加数据到Mongo/">使用python添加数据到mongo</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/Mongo基础/">Mongo基础</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Oracle
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Oracle/Oracle批量测试数据生成/">Oracle批量测试数据生成</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Redis/Redis常用操作/">Redis常用操作</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术文章
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/技术文章/Start/">数据处理相关</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            数据收集
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/数据收集/ELK/">ELK</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            组件安装配置
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Hadoop组件安装
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/1.配置ssh免密登录/">ssh免密登录</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/3.HBase伪集群模式安装/">HBase伪集群模式安装</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/">常用操作命令与问题记录</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/2.伪集群模式安装/">伪集群模式安装</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            机器学习
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/机器学习/1.机器学习认识/">机器学习认识</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/3.Logistic回归/">Logistic回归</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/2.KNN/">KNN</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/4.利用AdaBoost元算法提高分类性能/">AdaBoost算法</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/5.其他算法/">其他算法</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            生活学习
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/生活学习/在看的书和文章/">在看的书和文章</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            程序语言
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Python/Python语法学习笔记/">Python学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/模块安装/">pip 模块安装</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/基础操作/">Python常用函数</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Scala
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Scala/Scala入门/">Scala学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Scala/使用maven构建scala项目/">Scala项目构建</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            软件工程
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/Linux/ubuntu挂载samba/">ubunut 挂载samba</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            计算机网络
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/计算机网络/TCP-IP及应用问题/">Tcp,Ip及其应用</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            问题
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/问题/关于非技术类的几个问题/"></a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/wiki/WikiStart/">Wiki Start</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-工具组件/ActiveMQ/ActiveMQ介绍" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/wiki/categories/工具组件/">工具组件</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/wiki/categories/工具组件/ActiveMQ/">ActiveMQ</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/wiki/tags/activemq/">activemq</a>, <a class="tag-link" href="/wiki/tags/mq/">mq</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/wiki/工具组件/ActiveMQ/ActiveMQ介绍/">
+            <time datetime="2017-11-16T17:13:34.000Z" itemprop="datePublished">2017-11-17</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            ActiveMQ介绍
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">Catalogue</strong>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#队列使用-讲解流程"><span class="toc-number">1.</span> <span class="toc-text">队列使用 讲解流程</span></a></li></ol>
+                </div>
+            
+        
+        
+            <ul>
+<li>使用方式（嵌入模式、集群模式）</li>
+<li>概念：具体某一个队列、整个队列的创建、使用。一个broker</li>
+<li>连接方式（连接池？）</li>
+<li>支持协议</li>
+<li>几个端口作用、以及监控实现</li>
+<li>消息模式（发送订阅和点对点消息）</li>
+<li><p>与其它消息队列比较</p>
+</li>
+<li><p>消息确认机制（事物）</p>
+</li>
+<li><p>ActiveMQ的设置消息时长，事务，确认机制 ，持久化(六)（<a href="http://blog.csdn.net/u014401141/article/details/54772847）" rel="external nofollow noopener noreferrer" target="_blank">http://blog.csdn.net/u014401141/article/details/54772847）</a></p>
+</li>
+<li><p>集群方案（内嵌代理所引发的问题：消息过载、管理混乱）</p>
+</li>
+</ul>
+<h3 id="队列使用-讲解流程"><a href="#队列使用-讲解流程" class="headerlink" title="队列使用 讲解流程"></a>队列使用 讲解流程</h3><p>前言：断连导致消息丢失问题，消费者没有中断。<br>1、队列的优点，大概说一下（异步、系统之间解耦）<br>2、队列的使用场景，复杂的交易系统消息异步，实现系统解耦合。</p>
+<p>3、activemq相关（几个端口，支持的协议，应用的连接方式，队列的详细：broker、及队列及管理）<br>消息模式，消息时长的设置，事务，持久化机制。<br>4、我们对activemq的应用，应用内嵌模式。及用了之后的好处<br>(异步，提高系统性能、缓冲或者流量削峰，降低系统压力、防止不正常因素&lt;系统停止，连接断连，&gt;导致消息丢失，持久化消息)<br>或者说弥合 生产者和消费者速度和稳定性 不一致的差异。实现系统间解耦。</p>
+<p>举例，之前的积分系统，需要请求账户系统做积分增加。但账户系统某一天凌晨2点会停机升级。那这个积分就加不上了。<br>目前系统中的断连的情况，没有消息队列，消息只能丢失，或者没有好的处理方式防止丢失。</p>
+<p><a href="http://www.ywnds.com/?p=5791" rel="external nofollow noopener noreferrer" target="_blank">为什么需要消息队列</a></p>
+<p>系统的性能（并发量，吞吐量，响应时间）会有瓶颈</p>
+<p><a href="http://blog.csdn.net/cainiao_user/article/details/77146049" rel="external nofollow noopener noreferrer" target="_blank">聊聊QPS/TPS/并发量/系统吞吐量的概念</a></p>
+<blockquote>
+<p>短信发送时间肯定能达到1000，但完成单个事务的平均处理时间受到数据库操作的影响，两个同步数据库操作，一个insert，一个update。<br>所以最多处理一秒1000个比较难。做一些细节的优化。</p>
+</blockquote>
+<p><a href="https://wiki.quartz.ren/database/mysql-optimize.html">数据库优化</a></p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/wiki/数据处理/DataStore/Oracle/Oracle批量测试数据生成/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    Oracle批量测试数据生成
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/wiki/工具组件/ActiveMQ/ActiveMQ分享/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">ActiveMQ分享</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Nova &copy; 2019 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/wiki/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/wiki/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/wiki/js/main.js"></script>
+
+    </div>
+</body>

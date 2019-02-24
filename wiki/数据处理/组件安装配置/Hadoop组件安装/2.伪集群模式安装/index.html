@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>伪集群模式安装 | Nova`s Wiki</title>
+    
+    
+        <meta name="keywords" content="hadoop">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="搭建hadoop-2.6.0-cdh5.4.7伪分布式 CDH版下载地址 先来看看什么是CDH，为什么选择CHD版的Hadoop。 CDH属于Hadoop的一个发行版。 Hadoop有以下发行版：  Apache Hadoop Cloudera’s Distribution Including Apache Hadoop（CDH） Hortonworks Data Platform (HDP) M">
+<meta name="keywords" content="hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="伪集群模式安装">
+<meta property="og:url" content="http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/2.伪集群模式安装/index.html">
+<meta property="og:site_name" content="Nova`s Wiki">
+<meta property="og:description" content="搭建hadoop-2.6.0-cdh5.4.7伪分布式 CDH版下载地址 先来看看什么是CDH，为什么选择CHD版的Hadoop。 CDH属于Hadoop的一个发行版。 Hadoop有以下发行版：  Apache Hadoop Cloudera’s Distribution Including Apache Hadoop（CDH） Hortonworks Data Platform (HDP) M">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-02-24T02:19:04.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="伪集群模式安装">
+<meta name="twitter:description" content="搭建hadoop-2.6.0-cdh5.4.7伪分布式 CDH版下载地址 先来看看什么是CDH，为什么选择CHD版的Hadoop。 CDH属于Hadoop的一个发行版。 Hadoop有以下发行版：  Apache Hadoop Cloudera’s Distribution Including Apache Hadoop（CDH） Hortonworks Data Platform (HDP) M">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Nova`s Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/wiki/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/wiki/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/wiki/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/wiki/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/wiki/css/style.css">
+    <script src="/wiki/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/wiki/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?9088151460061a7c449bb9d5a3209fbc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/wiki/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Nova`s Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/wiki/">首页</a>
+                
+                    <a class="main-nav-link" href="/wiki/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/wiki/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/wiki/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/wiki/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/wiki/',
+        CONTENT_URL: '/wiki/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/wiki/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/wiki/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MicroService
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术框架
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Netty
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/Netty/Netty学习目录/">Netty学习目录</a></li>  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/Netty/读写事件流程分析与相关API/">读写事件流程分析与相关API</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            SpringBoot
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/SpringBoot/Readme/">SpringBoot</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            工具组件
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            ActiveMQ
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/ActiveMQ/ActiveMQ介绍/">ActiveMQ介绍</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/ActiveMQ/ActiveMQ分享/">ActiveMQ分享</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Builder
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Builder/sbt/">sbt了解</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Docker/1.Ubuntu16安装Docker环境/">Ubuntu16安装Docker环境</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/2.Docker环境使用MySQL/">Docker环境Mysql使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/3.Docker环境其他中间件使用/">Docker环境其他中间件使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/4.Dockerfile语法/">Dockerfile语法</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/5.Docker镜像仓库搭建/">Docker 仓库搭建</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/6.Docker网络/">Docker NetWork</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/7.系统镜像/">系统镜像</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/8.Docker其他/">Docker相关</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Elasticsearch
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Elasticsearch/1.ES环境搭建/">ES环境搭建</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Elasticsearch/Python客户端创建索引/">Python客户端创建索引</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            IDE
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/IDE/Git学习/">Jenkins项目常用配置</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/IDE/开发工具/">开发工具</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Jenkins
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/1.Jenkins认识/">Jenkins认识</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/2.Jenkins安装配置/">Jenkins安装配置</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/3.Jenkins插件使用/">Jenkins插件使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/4.Jenkins项目常用配置/">Jenkins项目常用配置</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            前端方案
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/前端方案/前端框架记录/">前端框架</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            数据处理
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            DataStore
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Elasticsearch
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES介绍/">ES介绍</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES基础/">ES基础</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES权限设置/"></a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES常用api/">ES常用API</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/Logstash安装/">Logstash安装</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Hadoop
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Hadoop/Hadoop学习资料/">Hadoop学习资料</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kafka
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kafka环境搭建/">Kafak环境搭建</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kakfa监控/">Kafak监控</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于kafka的offset存储/">关于kafka的offset存储</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于最近kafka的几个问题/">Kafka问题总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Mongo
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/使用python添加数据到Mongo/">使用python添加数据到mongo</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/Mongo基础/">Mongo基础</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Oracle
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Oracle/Oracle批量测试数据生成/">Oracle批量测试数据生成</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Redis/Redis常用操作/">Redis常用操作</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术文章
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/技术文章/Start/">数据处理相关</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            数据收集
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/数据收集/ELK/">ELK</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            组件安装配置
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Hadoop组件安装
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/1.配置ssh免密登录/">ssh免密登录</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/3.HBase伪集群模式安装/">HBase伪集群模式安装</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/">常用操作命令与问题记录</a></li>  <li class="file active"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/2.伪集群模式安装/">伪集群模式安装</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            机器学习
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/机器学习/1.机器学习认识/">机器学习认识</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/3.Logistic回归/">Logistic回归</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/2.KNN/">KNN</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/4.利用AdaBoost元算法提高分类性能/">AdaBoost算法</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/5.其他算法/">其他算法</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            生活学习
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/生活学习/在看的书和文章/">在看的书和文章</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            程序语言
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Python/Python语法学习笔记/">Python学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/模块安装/">pip 模块安装</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/基础操作/">Python常用函数</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Scala
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Scala/Scala入门/">Scala学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Scala/使用maven构建scala项目/">Scala项目构建</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            软件工程
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/Linux/ubuntu挂载samba/">ubunut 挂载samba</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            计算机网络
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/计算机网络/TCP-IP及应用问题/">Tcp,Ip及其应用</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            问题
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/问题/关于非技术类的几个问题/"></a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/wiki/WikiStart/">Wiki Start</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-数据处理/组件安装配置/Hadoop组件安装/2.伪集群模式安装" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/wiki/categories/数据处理/">数据处理</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/wiki/categories/数据处理/组件安装配置/">组件安装配置</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/wiki/categories/数据处理/组件安装配置/Hadoop组件安装/">Hadoop组件安装</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/wiki/tags/hadoop/">hadoop</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/2.伪集群模式安装/">
+            <time datetime="2019-02-16T04:56:24.000Z" itemprop="datePublished">2019-02-16</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            伪集群模式安装
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">Catalogue</strong>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CDH"><span class="toc-number">1.</span> <span class="toc-text">CDH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装hadoop-2-6-0-cdh5-4-0"><span class="toc-number">2.</span> <span class="toc-text">安装hadoop-2.6.0-cdh5.4.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#配置伪集群"><span class="toc-number">2.1.</span> <span class="toc-text">配置伪集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#格式化HDFS"><span class="toc-number">2.2.</span> <span class="toc-text">格式化HDFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#验证"><span class="toc-number">2.3.</span> <span class="toc-text">验证</span></a></li></ol></li></ol>
+                </div>
+            
+        
+        
+            <p><a href="https://blog.liyang.io/108.html" rel="external nofollow noopener noreferrer" target="_blank">搭建hadoop-2.6.0-cdh5.4.7伪分布式</a></p>
+<p><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a></p>
+<p>先来看看什么是CDH，为什么选择CHD版的Hadoop。</p>
+<h2 id="CDH"><a href="#CDH" class="headerlink" title="CDH"></a>CDH</h2><p>属于Hadoop的一个发行版。</p>
+<p>Hadoop有以下发行版：</p>
+<ul>
+<li>Apache Hadoop</li>
+<li>Cloudera’s Distribution Including Apache Hadoop（CDH）</li>
+<li>Hortonworks Data Platform (HDP)</li>
+<li>MapR</li>
+<li>EMR</li>
+</ul>
+<p>CDH版有以下优点：</p>
+<ul>
+<li>版本划分清晰</li>
+<li>版本更新速度快</li>
+<li>支持Kerberos安全认证</li>
+<li>文档清晰</li>
+<li>支持多种安装方式（Cloudera Manager方式）</li>
+</ul>
+<h2 id="安装hadoop-2-6-0-cdh5-4-0"><a href="#安装hadoop-2-6-0-cdh5-4-0" class="headerlink" title="安装hadoop-2.6.0-cdh5.4.0"></a>安装hadoop-2.6.0-cdh5.4.0</h2><p>首先到指定网站下载安装包<br><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a></p>
+<p>解压下载的安装包</p>
+<h3 id="配置伪集群"><a href="#配置伪集群" class="headerlink" title="配置伪集群"></a>配置伪集群</h3><ul>
+<li>1、进入 hadoop-2.6.0-cdh5.4.0/etc/hadoop</li>
+<li><p>2、编辑 hadoop-env.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi hadoop-env.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>3、修改JAVA_HOME的配置为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/tools/jdk1.8.0_131</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>4、编辑core-site.xml,添加如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;hdfs://node2:9000&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>node2说明，如果没有配置hosts，请将node2换成IP地址:wp保存并退出。</p>
+<ul>
+<li>5、编辑hdfs-site.xml,添加如下配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;!--开启web hdfs--&gt;</span><br><span class="line">        &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/opt/cdh/hadoop/name&lt;/value&gt;</span><br><span class="line">        &lt;description&gt; namenode 存放name table(fsimage)本地目录（需要修改）&lt;/description&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.edits.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;$&#123;dfs.namenode.name.dir&#125;&lt;/value&gt;</span><br><span class="line">        &lt;description&gt;namenode存放 transactionfile(edits)本地目录（请自行修改）&lt;/description&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">       &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">       &lt;value&gt;/opt/cdh/hadoop/data&lt;/value&gt;</span><br><span class="line">       &lt;description&gt;datanode存放block本地目录（请自行修改）&lt;/description&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以上配置完成，还需要创建文件夹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p cdh/hadoop/name</span><br><span class="line">mkdir  cdh/hadoop/data</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>6、配置mapred-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cp mapred-site.xml.template mapred-site.xml</span><br><span class="line">之后加入以下配置</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>7、编辑yarn-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>到此，所有配置都已完成。</p>
+<h3 id="格式化HDFS"><a href="#格式化HDFS" class="headerlink" title="格式化HDFS"></a>格式化HDFS</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hdfs namenode -format</span><br></pre></td></tr></table></figure>
+<p>看到如下信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">************************************************************/</span><br><span class="line">15/09/22 14:59:46 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]</span><br><span class="line">15/09/22 14:59:46 INFO namenode.NameNode: createNameNode [-format]</span><br><span class="line">15/09/22 14:59:48 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">15/09/22 14:59:49 WARN common.Util: Path /opt/cdh/hadoop/name should be specified as a URI in configuration files. Please update hdfs configuration.</span><br><span class="line">15/09/22 14:59:49 WARN common.Util: Path /opt/cdh/hadoop/name should be specified as a URI in configuration files. Please update hdfs configuration.</span><br><span class="line">Formatting using clusterid: CID-41ea6672-a32e-4b16-b704-962381ed409a</span><br><span class="line">15/09/22 14:59:49 INFO namenode.FSNamesystem: No KeyProvider found.</span><br><span class="line">15/09/22 14:59:49 INFO namenode.FSNamesystem: fsLock is fair:true</span><br><span class="line">15/09/22 14:59:49 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit=1000</span><br><span class="line">15/09/22 14:59:49 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true</span><br><span class="line">15/09/22 14:59:49 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000</span><br><span class="line">15/09/22 14:59:49 INFO blockmanagement.BlockManager: The block deletion will start around 2015 九月 22 14:59:49</span><br><span class="line">15/09/22 14:59:49 INFO util.GSet: Computing capacity for map BlocksMap</span><br><span class="line">15/09/22 14:59:49 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">15/09/22 14:59:49 INFO util.GSet: 2.0% max memory 966.7 MB = 19.3 MB</span><br><span class="line">15/09/22 14:59:49 INFO util.GSet: capacity      = 2^21 = 2097152 entries</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: defaultReplication         = 1</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: maxReplication             = 512</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: minReplication             = 1</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: shouldCheckForEnoughRacks  = false</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: encryptDataTransfer        = false</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: fsOwner             = root (auth:SIMPLE)</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: supergroup          = supergroup</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: isPermissionEnabled = true</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: HA Enabled: false</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: Append Enabled: true</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: Computing capacity for map INodeMap</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: 1.0% max memory 966.7 MB = 9.7 MB</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: capacity      = 2^20 = 1048576 entries</span><br><span class="line">15/09/22 14:59:50 INFO namenode.NameNode: Caching file names occuring more than 10 times</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: Computing capacity for map cachedBlocks</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: 0.25% max memory 966.7 MB = 2.4 MB</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: capacity      = 2^18 = 262144 entries</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: dfs.namenode.safemode.threshold-pct = 0.9990000128746033</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: dfs.namenode.safemode.min.datanodes = 0</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: dfs.namenode.safemode.extension     = 30000</span><br><span class="line">15/09/22 14:59:50 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10</span><br><span class="line">15/09/22 14:59:50 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10</span><br><span class="line">15/09/22 14:59:50 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: Retry cache on namenode is enabled</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: Computing capacity for map NameNodeRetryCache</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: 0.029999999329447746% max memory 966.7 MB = 297.0 KB</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: capacity      = 2^15 = 32768 entries</span><br><span class="line">15/09/22 14:59:50 INFO namenode.NNConf: ACLs enabled? false</span><br><span class="line">15/09/22 14:59:50 INFO namenode.NNConf: XAttrs enabled? true</span><br><span class="line">15/09/22 14:59:50 INFO namenode.NNConf: Maximum size of an xattr: 16384</span><br><span class="line">15/09/22 14:59:51 INFO namenode.FSImage: Allocated new BlockPoolId: BP-314159059-192.168.1.3-1442905191056</span><br><span class="line">15/09/22 14:59:51 INFO common.Storage: Storage directory /opt/cdh/hadoop/name has been successfully formatted.</span><br><span class="line">15/09/22 14:59:51 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid &gt;= 0</span><br><span class="line">15/09/22 14:59:51 INFO util.ExitUtil: Exiting with status 0</span><br><span class="line">15/09/22 14:59:51 INFO namenode.NameNode: SHUTDOWN_MSG: </span><br><span class="line">/************************************************************</span><br><span class="line">SHUTDOWN_MSG: Shutting down NameNode at node2/192.168.1.3</span><br><span class="line">************************************************************/</span><br></pre></td></tr></table></figure>
+<p>如果不报错，则格式化成功。</p>
+<p>然后分别启动HDFS和Yarn：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sbin/start-dfs.sh</span><br><span class="line">sbin/start-yarn.sh</span><br></pre></td></tr></table></figure>
+<p>启动过程没有错误则启动成功。</p>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><ul>
+<li>使用jps可以查看相关进程</li>
+</ul>
+<p>显示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">nova@ubuntu208:~$ jps</span><br><span class="line">7667 Jps</span><br><span class="line">28532 DataNode</span><br><span class="line">28742 SecondaryNameNode</span><br><span class="line">29319 NodeManager</span><br><span class="line">28376 NameNode</span><br><span class="line">29018 ResourceManager</span><br></pre></td></tr></table></figure>
+<ul>
+<li>管理地址</li>
+</ul>
+<p>yarn: <a href="http://192.168.1.34:8088/cluster" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.34:8088/cluster</a></p>
+<p>hdfs状态: <a href="http://192.168.1.34:50070/dfshealth.html#tab-overview" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.34:50070/dfshealth.html#tab-overview</a></p>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    常用操作命令与问题记录
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/wiki/工具组件/前端方案/前端框架记录/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">前端框架</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Nova &copy; 2019 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/wiki/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/wiki/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/wiki/js/main.js"></script>
+
+    </div>
+</body>

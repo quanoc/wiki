@@ -129,11 +129,104 @@
   </entry>
   
   <entry>
-    <title></title>
+    <title>HBase伪集群模式安装</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/3.HBase%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E5%AE%89%E8%A3%85/"/>
+    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/3.HBase伪集群模式安装/</id>
+    <published>2019-02-16T04:56:24.000Z</published>
+    <updated>2019-02-24T02:20:30.498Z</updated>
+    
+    <content type="html"><![CDATA[<p>同Hadoop安装，到<br><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a>下载hbase。选择 hbase-1.0.0-cdh5.4.0.tar.gz</p><blockquote><p>hbase伪分布式模式是基于hdfs环境的</p></blockquote><p>因此，在安装hadoop的前提下，我们配置Hbase的伪分布式模式如下：</p><ul><li>1.下载并解压</li><li>2.配置环境变量（可选）</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bashrc</span><br><span class="line">#添加</span><br><span class="line">export  PATH=$PATH:/opt/app/skyeye/hbase-1.0.0-cdh5.4.0/bin</span><br><span class="line">. ~/.bashrc</span><br><span class="line">#验证</span><br><span class="line">hbase version</span><br></pre></td></tr></table></figure><h3 id="伪集群模式配置"><a href="#伪集群模式配置" class="headerlink" title="伪集群模式配置"></a>伪集群模式配置</h3><ul><li>1.配置 conf/hbase-env.sh<br>将JAVA_HOME变量设置为本机jdk路径。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/tools/jdk1.8.0_131  #配置本机的java安装根目录</span><br><span class="line">export HBASE_MANAGES_ZK=true       #配置使用hbase自带的zookeeper，不使用自己搭建的zookeeper</span><br></pre></td></tr></table></figure><p>如果使用 export HBASE_MANAGES_ZK=true， 即配置不使用hbase自带的zookeeper，使用自己搭建的zookeeper</p><blockquote><p>hbase可以使用自定义zookeeper管理，也可以使用自带的zookeeper。</p></blockquote><ul><li>2.配置conf/hbase-site.xml<br>修改hbase.rootdir,将其指向hdfs，并指定Hbase在HDFS上的存储路径。<br>将hbase.cluster.distributed设置为true。<br>添加zk的节点地址。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line"> &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://localhost:9000/hbase&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"> &lt;!--以下信息只有在使用自己搭建的zk时添加--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">     &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</span><br><span class="line">     &lt;value&gt;cdhnode1,cdhnode2,cdhnode3&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">    &lt;!--默认为/tmp/目录下--&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/opt/app/skyeye/data/hbasetmp/&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure><ul><li>3.启动HBase</li></ul><p>完成上述操作之后，启动HBase，需要先启动Hadoop。</p><p>启动及检查：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:~$ start-all.sh </span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps</span><br><span class="line">9250 ResourceManager</span><br><span class="line">9683 Jps</span><br><span class="line">9365 NodeManager</span><br><span class="line">9110 SecondaryNameNode</span><br><span class="line">8935 DataNode</span><br><span class="line">8795 NameNode</span><br></pre></td></tr></table></figure><p>上述则Hadoop启动成功。</p><blockquote><p>当前版本。使用start-all.sh启动hadoop时会提示以下信息，所以建议分别启动hdfs和yarn。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This script is Deprecated. Instead use start-dfs.sh and start-yarn.sh</span><br></pre></td></tr></table></figure><p>之后启动HBase，启动及检查</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">start-hbase.sh          # 启动Hbase</span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps        # 检查</span><br><span class="line">3728 Jps</span><br><span class="line">3123 HRegionServer</span><br><span class="line">2407 NodeManager</span><br><span class="line">1961 DataNode</span><br><span class="line">2298 ResourceManager</span><br><span class="line">3004 HMaster</span><br><span class="line">1852 NameNode</span><br><span class="line">2158 SecondaryNameNode</span><br><span class="line">2943 HQuorumPeer</span><br></pre></td></tr></table></figure><p>以上几个进程说明Hbase启动成功。</p><ul><li>4.Hbase操作    </li></ul><p>可以进入shell模式，通过命令行操作查看hbase数据库信息。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hbase shell    #进入shell模式</span><br><span class="line">list    # 查看当前数据库所有表信息</span><br><span class="line">describe &apos;member&apos;    # 查看表结构</span><br><span class="line"># 创建一个member表，其拥有member_id,address,info三个列族</span><br><span class="line">create &apos;member&apos;,&apos;member_id&apos;,&apos;address&apos;,&apos;info&apos;</span><br></pre></td></tr></table></figure><ul><li>5.查看HDFS的HBase数据库文件</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:～$ hadoop fs -ls /hbase</span><br><span class="line">17/10/28 20:45:14 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Found 6 items</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/.tmp</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/WALs</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/data</span><br><span class="line">-rw-r--r--   3 nova supergroup         42 2017-10-28 00:03 /hbase/hbase.id</span><br><span class="line">-rw-r--r--   3 nova supergroup          7 2017-10-28 00:03 /hbase/hbase.version</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:14 /hbase/oldWALs</span><br></pre></td></tr></table></figure><ul><li>6.停止HBase</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop-hbase.sh    #停止Hbase</span><br></pre></td></tr></table></figure><p>问题：停止hbase时，HRegionServer进程不能停止。会导致下次启动hbase时出错。</p><p>原因:</p><h3 id="HBase的用户界面"><a href="#HBase的用户界面" class="headerlink" title="HBase的用户界面"></a>HBase的用户界面</h3><ul><li>yarn: <a href="http://192.168.1.20:8088/cluster" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:8088/cluster</a></li><li><p>hdfs状态: <a href="http://192.168.1.20:50070/dfshealth.html#tab-overview" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:50070/dfshealth.html#tab-overview</a></p></li><li><p>Master: <a href="http://192.168.1.20:60010/master.jsp" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:60010/master.jsp</a></p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;同Hadoop安装，到&lt;br&gt;&lt;a href=&quot;http://archive.cloudera.com/cdh5/cdh/5/&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;CDH版下载地址&lt;/a&gt;
+      
+    
+    </summary>
+    
+      <category term="数据处理" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"/>
+    
+      <category term="组件安装配置" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"/>
+    
+      <category term="Hadoop组件安装" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/"/>
+    
+    
+      <category term="hadoop" scheme="http://wiki.quartz.ren/tags/hadoop/"/>
+    
+      <category term="hbase" scheme="http://wiki.quartz.ren/tags/hbase/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>常用操作命令与问题记录</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/4.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E4%B8%8E%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/</id>
+    <published>2019-02-16T04:56:24.000Z</published>
+    <updated>2019-02-24T02:21:51.913Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li><p>启动hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-dfs.sh</span><br><span class="line">start-yarn.sh</span><br></pre></td></tr></table></figure></li><li><p>停止hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stop-dfs.sh</span><br><span class="line">stop-yarn.sh</span><br></pre></td></tr></table></figure></li></ul><blockquote><p>启动或停止所有，即：HDFS和Yarn</p></blockquote><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><h3 id="一、dfs的端口9000不通"><a href="#一、dfs的端口9000不通" class="headerlink" title="一、dfs的端口9000不通"></a>一、dfs的端口9000不通</h3><p>原因：忘记格式化hdfs。</p><p>启动顺序</p><ul><li>1.启动hdfs</li><li>2.启动yarn</li><li>3.启动hbase</li></ul><h3 id="二、查看hbase在hdfs中目录时"><a href="#二、查看hbase在hdfs中目录时" class="headerlink" title="二、查看hbase在hdfs中目录时"></a>二、查看hbase在hdfs中目录时</h3><p>使用hadoop fs -ls /hbase查看hbase目录，出现以下信息：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">17/10/28 22:25:28 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br></pre></td></tr></table></figure><ul><li>hbase 可以配置使用本地文件系统（一般单击模式），也可以使用hdfs（伪集群或集群模式）</li><li>hbase 可以配置使用自己安装的zk，也可以使用自带的zk。</li></ul><p>hadoop的name、data文件夹下存放什么？</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;&lt;p&gt;启动hadoop&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line
+      
+    
+    </summary>
+    
+      <category term="数据处理" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"/>
+    
+      <category term="组件安装配置" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"/>
+    
+      <category term="Hadoop组件安装" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/"/>
+    
+    
+      <category term="hadoop" scheme="http://wiki.quartz.ren/tags/hadoop/"/>
+    
+      <category term="hbase" scheme="http://wiki.quartz.ren/tags/hbase/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>伪集群模式安装</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/2.%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E5%AE%89%E8%A3%85/"/>
+    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/2.伪集群模式安装/</id>
+    <published>2019-02-16T04:56:24.000Z</published>
+    <updated>2019-02-24T02:19:04.336Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://blog.liyang.io/108.html" rel="external nofollow noopener noreferrer" target="_blank">搭建hadoop-2.6.0-cdh5.4.7伪分布式</a></p><p><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a></p><p>先来看看什么是CDH，为什么选择CHD版的Hadoop。</p><h2 id="CDH"><a href="#CDH" class="headerlink" title="CDH"></a>CDH</h2><p>属于Hadoop的一个发行版。</p><p>Hadoop有以下发行版：</p><ul><li>Apache Hadoop</li><li>Cloudera’s Distribution Including Apache Hadoop（CDH）</li><li>Hortonworks Data Platform (HDP)</li><li>MapR</li><li>EMR</li></ul><p>CDH版有以下优点：</p><ul><li>版本划分清晰</li><li>版本更新速度快</li><li>支持Kerberos安全认证</li><li>文档清晰</li><li>支持多种安装方式（Cloudera Manager方式）</li></ul><h2 id="安装hadoop-2-6-0-cdh5-4-0"><a href="#安装hadoop-2-6-0-cdh5-4-0" class="headerlink" title="安装hadoop-2.6.0-cdh5.4.0"></a>安装hadoop-2.6.0-cdh5.4.0</h2><p>首先到指定网站下载安装包<br><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a></p><p>解压下载的安装包</p><h3 id="配置伪集群"><a href="#配置伪集群" class="headerlink" title="配置伪集群"></a>配置伪集群</h3><ul><li>1、进入 hadoop-2.6.0-cdh5.4.0/etc/hadoop</li><li><p>2、编辑 hadoop-env.sh</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi hadoop-env.sh</span><br></pre></td></tr></table></figure></li><li><p>3、修改JAVA_HOME的配置为</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/tools/jdk1.8.0_131</span><br></pre></td></tr></table></figure></li><li><p>4、编辑core-site.xml,添加如下配置：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">        &lt;property&gt;</span><br><span class="line">                &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">                &lt;value&gt;hdfs://node2:9000&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></li></ul><p>node2说明，如果没有配置hosts，请将node2换成IP地址:wp保存并退出。</p><ul><li>5、编辑hdfs-site.xml,添加如下配置<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;!--开启web hdfs--&gt;</span><br><span class="line">        &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/opt/cdh/hadoop/name&lt;/value&gt;</span><br><span class="line">        &lt;description&gt; namenode 存放name table(fsimage)本地目录（需要修改）&lt;/description&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.edits.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;$&#123;dfs.namenode.name.dir&#125;&lt;/value&gt;</span><br><span class="line">        &lt;description&gt;namenode存放 transactionfile(edits)本地目录（请自行修改）&lt;/description&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">       &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">       &lt;value&gt;/opt/cdh/hadoop/data&lt;/value&gt;</span><br><span class="line">       &lt;description&gt;datanode存放block本地目录（请自行修改）&lt;/description&gt;</span><br><span class="line">   &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></li></ul><p>以上配置完成，还需要创建文件夹</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p cdh/hadoop/name</span><br><span class="line">mkdir  cdh/hadoop/data</span><br></pre></td></tr></table></figure><ul><li><p>6、配置mapred-site.xml</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cp mapred-site.xml.template mapred-site.xml</span><br><span class="line">之后加入以下配置</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></li><li><p>7、编辑yarn-site.xml</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></li></ul><p>到此，所有配置都已完成。</p><h3 id="格式化HDFS"><a href="#格式化HDFS" class="headerlink" title="格式化HDFS"></a>格式化HDFS</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hdfs namenode -format</span><br></pre></td></tr></table></figure><p>看到如下信息：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">************************************************************/</span><br><span class="line">15/09/22 14:59:46 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]</span><br><span class="line">15/09/22 14:59:46 INFO namenode.NameNode: createNameNode [-format]</span><br><span class="line">15/09/22 14:59:48 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">15/09/22 14:59:49 WARN common.Util: Path /opt/cdh/hadoop/name should be specified as a URI in configuration files. Please update hdfs configuration.</span><br><span class="line">15/09/22 14:59:49 WARN common.Util: Path /opt/cdh/hadoop/name should be specified as a URI in configuration files. Please update hdfs configuration.</span><br><span class="line">Formatting using clusterid: CID-41ea6672-a32e-4b16-b704-962381ed409a</span><br><span class="line">15/09/22 14:59:49 INFO namenode.FSNamesystem: No KeyProvider found.</span><br><span class="line">15/09/22 14:59:49 INFO namenode.FSNamesystem: fsLock is fair:true</span><br><span class="line">15/09/22 14:59:49 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit=1000</span><br><span class="line">15/09/22 14:59:49 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true</span><br><span class="line">15/09/22 14:59:49 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000</span><br><span class="line">15/09/22 14:59:49 INFO blockmanagement.BlockManager: The block deletion will start around 2015 九月 22 14:59:49</span><br><span class="line">15/09/22 14:59:49 INFO util.GSet: Computing capacity for map BlocksMap</span><br><span class="line">15/09/22 14:59:49 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">15/09/22 14:59:49 INFO util.GSet: 2.0% max memory 966.7 MB = 19.3 MB</span><br><span class="line">15/09/22 14:59:49 INFO util.GSet: capacity      = 2^21 = 2097152 entries</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: defaultReplication         = 1</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: maxReplication             = 512</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: minReplication             = 1</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: shouldCheckForEnoughRacks  = false</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: encryptDataTransfer        = false</span><br><span class="line">15/09/22 14:59:50 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: fsOwner             = root (auth:SIMPLE)</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: supergroup          = supergroup</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: isPermissionEnabled = true</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: HA Enabled: false</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: Append Enabled: true</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: Computing capacity for map INodeMap</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: 1.0% max memory 966.7 MB = 9.7 MB</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: capacity      = 2^20 = 1048576 entries</span><br><span class="line">15/09/22 14:59:50 INFO namenode.NameNode: Caching file names occuring more than 10 times</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: Computing capacity for map cachedBlocks</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: 0.25% max memory 966.7 MB = 2.4 MB</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: capacity      = 2^18 = 262144 entries</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: dfs.namenode.safemode.threshold-pct = 0.9990000128746033</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: dfs.namenode.safemode.min.datanodes = 0</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: dfs.namenode.safemode.extension     = 30000</span><br><span class="line">15/09/22 14:59:50 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10</span><br><span class="line">15/09/22 14:59:50 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10</span><br><span class="line">15/09/22 14:59:50 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: Retry cache on namenode is enabled</span><br><span class="line">15/09/22 14:59:50 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: Computing capacity for map NameNodeRetryCache</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: VM type       = 64-bit</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: 0.029999999329447746% max memory 966.7 MB = 297.0 KB</span><br><span class="line">15/09/22 14:59:50 INFO util.GSet: capacity      = 2^15 = 32768 entries</span><br><span class="line">15/09/22 14:59:50 INFO namenode.NNConf: ACLs enabled? false</span><br><span class="line">15/09/22 14:59:50 INFO namenode.NNConf: XAttrs enabled? true</span><br><span class="line">15/09/22 14:59:50 INFO namenode.NNConf: Maximum size of an xattr: 16384</span><br><span class="line">15/09/22 14:59:51 INFO namenode.FSImage: Allocated new BlockPoolId: BP-314159059-192.168.1.3-1442905191056</span><br><span class="line">15/09/22 14:59:51 INFO common.Storage: Storage directory /opt/cdh/hadoop/name has been successfully formatted.</span><br><span class="line">15/09/22 14:59:51 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid &gt;= 0</span><br><span class="line">15/09/22 14:59:51 INFO util.ExitUtil: Exiting with status 0</span><br><span class="line">15/09/22 14:59:51 INFO namenode.NameNode: SHUTDOWN_MSG: </span><br><span class="line">/************************************************************</span><br><span class="line">SHUTDOWN_MSG: Shutting down NameNode at node2/192.168.1.3</span><br><span class="line">************************************************************/</span><br></pre></td></tr></table></figure><p>如果不报错，则格式化成功。</p><p>然后分别启动HDFS和Yarn：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sbin/start-dfs.sh</span><br><span class="line">sbin/start-yarn.sh</span><br></pre></td></tr></table></figure><p>启动过程没有错误则启动成功。</p><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><ul><li>使用jps可以查看相关进程</li></ul><p>显示如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">nova@ubuntu208:~$ jps</span><br><span class="line">7667 Jps</span><br><span class="line">28532 DataNode</span><br><span class="line">28742 SecondaryNameNode</span><br><span class="line">29319 NodeManager</span><br><span class="line">28376 NameNode</span><br><span class="line">29018 ResourceManager</span><br></pre></td></tr></table></figure><ul><li>管理地址</li></ul><p>yarn: <a href="http://192.168.1.34:8088/cluster" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.34:8088/cluster</a></p><p>hdfs状态: <a href="http://192.168.1.34:50070/dfshealth.html#tab-overview" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.34:50070/dfshealth.html#tab-overview</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://blog.liyang.io/108.html&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;搭建hadoop-2.6.0-cdh5.4.7伪分布式&lt;/a&gt;&lt;/p&gt;
+      
+    
+    </summary>
+    
+      <category term="数据处理" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"/>
+    
+      <category term="组件安装配置" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"/>
+    
+      <category term="Hadoop组件安装" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/"/>
+    
+    
+      <category term="hadoop" scheme="http://wiki.quartz.ren/tags/hadoop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>前端框架</title>
     <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/%E5%89%8D%E7%AB%AF%E6%96%B9%E6%A1%88/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6%E8%AE%B0%E5%BD%95/"/>
     <id>http://wiki.quartz.ren/wiki/工具组件/前端方案/前端框架记录/</id>
-    <published>2019-02-23T13:37:57.986Z</published>
-    <updated>2019-02-23T13:37:57.986Z</updated>
+    <published>2019-01-08T03:55:57.000Z</published>
+    <updated>2019-02-24T02:17:02.307Z</updated>
     
     <content type="html"><![CDATA[<p><a href="https://antd-admin.zuiidea.com/zh/dashboard" rel="external nofollow noopener noreferrer" target="_blank">https://antd-admin.zuiidea.com/zh/dashboard</a></p>]]></content>
     
@@ -149,29 +242,6 @@
       <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
     
       <category term="前端方案" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/%E5%89%8D%E7%AB%AF%E6%96%B9%E6%A1%88/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="http://wiki.quartz.ren/wiki/MicroService/README/"/>
-    <id>http://wiki.quartz.ren/wiki/MicroService/README/</id>
-    <published>2019-02-23T13:37:57.984Z</published>
-    <updated>2019-02-23T13:37:57.984Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="http://coding.imooc.com/class/252.html?mc_marking=74223df62e1fc4b6f7854ee89e539176&amp;mc_channel=banner" rel="external nofollow noopener noreferrer" target="_blank">Spring Boot 2.0深度实践之核心技术</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;http://coding.imooc.com/class/252.html?mc_marking=74223df62e1fc4b6f7854ee89e539176&amp;amp;mc_channel=banner&quot; rel=&quot;external nofollow
-      
-    
-    </summary>
-    
-      <category term="MicroService" scheme="http://wiki.quartz.ren/categories/MicroService/"/>
     
     
   </entry>
@@ -197,6 +267,36 @@
       <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
     
       <category term="IDE" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/IDE/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ssh免密登录</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/1.%E9%85%8D%E7%BD%AEssh%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95/"/>
+    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/1.配置ssh免密登录/</id>
+    <published>2019-01-08T03:55:57.000Z</published>
+    <updated>2019-02-24T02:17:40.707Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>1.首先查看电脑的SSH Keys是否存在</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -al ~/.ssh</span><br></pre></td></tr></table></figure><ul><li>2.存在以下文件则说明key已生成</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-rw------- 1 zbm zbm 1675 Oct 28 11:04 id_rsa</span><br><span class="line">-rw-r--r-- 1 zbm zbm  399 Oct 28 11:04 id_rsa.pub</span><br></pre></td></tr></table></figure><ul><li>3.否则生成key:</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure><ul><li>4.之后配置免密登陆：即将pub key put到远程服务器。输入密码，之后每次就可免密登陆。</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub &lt;romte_ip&gt;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;1.首先查看电脑的SSH Keys是否存在&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;
+      
+    
+    </summary>
+    
+      <category term="数据处理" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"/>
+    
+      <category term="组件安装配置" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"/>
+    
+      <category term="Hadoop组件安装" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/"/>
     
     
   </entry>
@@ -286,8 +386,8 @@
   
   <entry>
     <title>Docker 仓库搭建</title>
-    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/002.Docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/"/>
-    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/002.Docker镜像仓库搭建/</id>
+    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/5.Docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/"/>
+    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/5.Docker镜像仓库搭建/</id>
     <published>2018-12-14T13:55:57.000Z</published>
     <updated>2019-02-23T13:37:57.985Z</updated>
     
@@ -310,9 +410,140 @@
   </entry>
   
   <entry>
+    <title>系统镜像</title>
+    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/7.%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/"/>
+    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/7.系统镜像/</id>
+    <published>2018-12-14T13:55:57.000Z</published>
+    <updated>2019-02-24T02:32:34.952Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h2><p><a href="https://dev.aliyun.com/detail.html?spm=5176.1971733.2.22.4884464bc4qgot&amp;repoId=1271" rel="external nofollow noopener noreferrer" target="_blank">镜像地址</a></p><ul><li>拉取镜像</li><li>启动镜像</li></ul><h3 id="在镜像中操作"><a href="#在镜像中操作" class="headerlink" title="在镜像中操作"></a>在镜像中操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -i -t ubuntu bash</span><br></pre></td></tr></table></figure><h2 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h2><h4 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull centos:6.8</span><br></pre></td></tr></table></figure><h4 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -ti --name centos001 centos:6.8  /bin/bash</span><br></pre></td></tr></table></figure><h4 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi 、 sshd</span><br><span class="line"></span><br><span class="line">yum install vi</span><br><span class="line"></span><br><span class="line">yum install openssh-server</span><br></pre></td></tr></table></figure><ul><li>查看是否启动</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/sshd status</span><br><span class="line"></span><br><span class="line">service sshd start</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Ubuntu&quot;&gt;&lt;a href=&quot;#Ubuntu&quot; class=&quot;headerlink&quot; title=&quot;Ubuntu&quot;&gt;&lt;/a&gt;Ubuntu&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://dev.aliyun.com/detail.html?spm=5176.1
+      
+    
+    </summary>
+    
+      <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
+    
+      <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu16安装Docker环境</title>
+    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/1.Ubuntu16%E5%AE%89%E8%A3%85Docker%E7%8E%AF%E5%A2%83/"/>
+    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/1.Ubuntu16安装Docker环境/</id>
+    <published>2018-12-12T03:55:57.000Z</published>
+    <updated>2019-02-24T02:28:03.900Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前每次安装都是上网查查资料，每次待找半天。所以在这里总结下。首先Docker在Ubuntu下的安装分为以下几个步骤：</p><ul><li>添加Docker源</li><li>安装aufs驱动linux-image-extra</li><li>安装Docker</li><li>安装后的设置</li><li>Docker更新</li></ul><h2 id="添加Docker源"><a href="#添加Docker源" class="headerlink" title="添加Docker源"></a>添加Docker源</h2><p>解释一下。使用Ubuntu在命令行可以直接安装Docker，但是一般都是老一些的版本，而且下载缓慢。所以换Docker源很有必要。</p><p>具体操作如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line"># 增加CA证书</span><br><span class="line">sudo apt-get install apt-transport-https ca-certificates</span><br><span class="line"># 添加GPG Key(一种加密手段)</span><br><span class="line">sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D</span><br><span class="line"># 添加docker的源</span><br><span class="line">echo &quot;deb https://apt.dockerproject.org/repo ubuntu-xenial main&quot;  &gt; /etc/apt/sources.list.d/docker.list</span><br><span class="line">或</span><br><span class="line">echo &quot;deb https://apt.dockerproject.org/repo ubuntu-xenial main&quot; | sudo tee /etc/apt/sources.list.d/docker.list</span><br><span class="line"># 再次更新源</span><br><span class="line">sudo apt-get update</span><br><span class="line"># 清除过时源（以防万一）</span><br><span class="line">sudo apt-get purge lxc-docker</span><br><span class="line"># 验证APT是从正确的库源下载应用</span><br><span class="line">apt-cache policy docker-engine</span><br></pre></td></tr></table></figure><h2 id="安装aufs驱动linux-image-extra"><a href="#安装aufs驱动linux-image-extra" class="headerlink" title="安装aufs驱动linux-image-extra"></a>安装aufs驱动linux-image-extra</h2><p>For Ubuntu Trusty, Wily, and Xenial, it’s recommended to install the linux-image-extra kernel package. The linux-image-extra package allows you use the aufs storage driver可以实现容器间可执行文件和运行库的共享。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install linux-image-extra-$(uname -r)</span><br></pre></td></tr></table></figure><h2 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install docker-engine</span><br></pre></td></tr></table></figure><h2 id="安装后的设置"><a href="#安装后的设置" class="headerlink" title="安装后的设置"></a>安装后的设置</h2><p>将用户添加到docker组中，避免每次都是用sudo。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker $&#123;user&#125;</span><br></pre></td></tr></table></figure><h2 id="Docker更新"><a href="#Docker更新" class="headerlink" title="Docker更新"></a>Docker更新</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 更新Docker</span><br><span class="line">sudo apt-get upgrade docker-engine</span><br><span class="line"># 卸载Docker</span><br><span class="line">sudo apt-get purge docker-engine</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;之前每次安装都是上网查查资料，每次待找半天。所以在这里总结下。首先Docker在Ubuntu下的安装分为以下几个步骤：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;添加Docker源&lt;/li&gt;
+&lt;li&gt;安装aufs驱动linux-image-extra&lt;/li&gt;
+&lt;li&gt;安装Docker&lt;/
+      
+    
+    </summary>
+    
+      <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
+    
+      <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Docker环境Mysql使用</title>
+    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/2.Docker%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8MySQL/"/>
+    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/2.Docker环境使用MySQL/</id>
+    <published>2018-12-12T03:55:57.000Z</published>
+    <updated>2019-02-24T02:29:19.756Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://dev.aliyun.com/detail.html?spm=5176.1972343.2.36.sjIQu3&amp;repoId=1239" rel="external nofollow noopener noreferrer" target="_blank">阿里云镜像仓库地址</a></p><ul><li>配置docker使用阿里云镜像地址</li><li><p>获取镜像</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull mysql</span><br></pre></td></tr></table></figure></li><li><p>启动镜像</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=zhang -d mysql</span><br></pre></td></tr></table></figure></li></ul><p>参数指定root用户密码</p><ul><li>验证</li></ul><p>进入容器，登录mysql，可以看到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 3</span><br><span class="line">Server version: 5.7.20 MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2017, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br></pre></td></tr></table></figure></p><ul><li>mysql创建用户并授权<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">create database ibase4j; </span><br><span class="line">create user ibase; </span><br><span class="line">grant all privileges on ibase4j.* to ibase@&apos;192.168.1.7&apos; identified by &apos;ibase&apos;; </span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://dev.aliyun.com/detail.html?spm=5176.1972343.2.36.sjIQu3&amp;amp;repoId=1239&quot; rel=&quot;external nofollow noopener noreferrer&quot; tar
+      
+    
+    </summary>
+    
+      <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
+    
+      <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Docker环境其他中间件使用</title>
+    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/3.Docker%E7%8E%AF%E5%A2%83%E5%85%B6%E4%BB%96%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%BD%BF%E7%94%A8/"/>
+    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/3.Docker环境其他中间件使用/</id>
+    <published>2018-12-12T03:55:57.000Z</published>
+    <updated>2019-02-24T02:31:13.557Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li><p>phpmyadmin</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --name myadmin -d -e PMA_HOST=172.17.0.2 phpmyadmin/phpmyadmin </span><br><span class="line">docker run --name yst_myadmin -d -e PMA_HOST=10.10.73.109 phpmyadmin/phpmyadmin</span><br></pre></td></tr></table></figure></li><li><p>redis</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name some-redis -d redis</span><br></pre></td></tr></table></figure></li><li><p>elasticsearch</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d elasticsearch</span><br></pre></td></tr></table></figure></li></ul><p><a href="http://elasticsearch-py.readthedocs.io/en/master/" rel="external nofollow noopener noreferrer" target="_blank">es的python 客户端</a></p><p><a href="https://www.elastic.co/guide/en/elasticsearch/client/index.html" rel="external nofollow noopener noreferrer" target="_blank">Elasticsearch Clients</a></p><p><a href="https://www.cnblogs.com/pilihaotian/p/5846173.html" rel="external nofollow noopener noreferrer" target="_blank">Elasticsearch集群和索引常用命令</a></p><ul><li><p>rabbitmq</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --hostname my-rabbit --name some-rabbit rabbitmq</span><br><span class="line">docker run -d --hostname rabbit001 --name myrabbit -e RABBITMQ_DEFAULT_USER=admin \</span><br><span class="line">-e RABBITMQ_DEFAULT_PASS=admin123 -p 5672:5672 rabbitmq</span><br></pre></td></tr></table></figure></li><li><p>zookeeper</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run  --name some-zookeeper -p 2181:2181  --restart always -d zookeeper</span><br></pre></td></tr></table></figure></li><li><p>nexus<br><a href="https://dev.aliyun.com/detail.html?spm=5176.1972343.2.26.3cf918df1Ojzio&amp;repoId=20356" rel="external nofollow noopener noreferrer" target="_blank">nexus官方镜像</a></p></li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull registry.cn-hangzhou.aliyuncs.com/nichozuo/nexus</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    --detach \</span><br><span class="line">    --name nexus \</span><br><span class="line">    --restart always \</span><br><span class="line">    --publish 8081:8081 \</span><br><span class="line">    --env CONTEXT_PATH=/nexus \</span><br><span class="line">    --volume /opt/tools/nexus:/sonatype-work \</span><br><span class="line">    --volume /etc/localtime:/etc/localtime:ro \</span><br><span class="line">    registry.cn-hangzhou.aliyuncs.com/nichozuo/nexus</span><br></pre></td></tr></table></figure><p>镜像启动见链接以上地址</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;&lt;p&gt;phpmyadmin&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;li
+      
+    
+    </summary>
+    
+      <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
+    
+      <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Dockerfile语法</title>
+    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/4.Dockerfile%E8%AF%AD%E6%B3%95/"/>
+    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/4.Dockerfile语法/</id>
+    <published>2018-12-12T03:55:57.000Z</published>
+    <updated>2019-02-24T02:30:14.210Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://www.cnblogs.com/niloay/p/6261784.html" rel="external nofollow noopener noreferrer" target="_blank">Dockerfile创建镜像</a></p><p>Dockerfile</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># This dockerfile uses the ubuntu image</span><br><span class="line"># VERSION 2 - EDITION 1</span><br><span class="line"># Author: docker_user</span><br><span class="line"># Command format: Instruction [arguments / command] ..</span><br><span class="line"></span><br><span class="line"># Base image to use, this must be set as the first line</span><br><span class="line">FROM ubuntu</span><br><span class="line"></span><br><span class="line"># Maintainer: docker_user &lt;docker_user at email.com&gt; (@docker_user)</span><br><span class="line">MAINTAINER docker_user docker_user@email.com</span><br><span class="line"></span><br><span class="line"># Commands to update the image</span><br><span class="line">#RUN echo &quot;deb http://archive.ubuntu.com/ubuntu/ raring main universe&quot; &gt;&gt; /etc/apt/sources.list</span><br><span class="line">#RUN apt-get update &amp;&amp; apt-get install -y nginx</span><br><span class="line">#RUN echo &quot;\ndaemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf</span><br><span class="line"></span><br><span class="line"># Commands when creating a new container</span><br><span class="line">#CMD /usr/sbin/nginx</span><br><span class="line"></span><br><span class="line">ENV JAVA_HOME=/opt/tools/jdk1.8.0_131</span><br><span class="line">ENV PATH=$JAVA_HOME/bin:$PATH</span><br><span class="line">ENV CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line"></span><br><span class="line"># docker build -t nova/jdk .</span><br><span class="line"># docker run -it --name my-java -d java</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://www.cnblogs.com/niloay/p/6261784.html&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Dockerfile创建镜像&lt;/a&gt;&lt;/p
+      
+    
+    </summary>
+    
+      <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
+    
+      <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Docker NetWork</title>
-    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/001.Docker%E7%BD%91%E7%BB%9C/"/>
-    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/001.Docker网络/</id>
+    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/6.Docker%E7%BD%91%E7%BB%9C/"/>
+    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/6.Docker网络/</id>
     <published>2018-12-12T03:55:57.000Z</published>
     <updated>2019-02-23T13:37:57.985Z</updated>
     
@@ -331,215 +562,6 @@
     
       <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>ELK</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86/ELK/"/>
-    <id>http://wiki.quartz.ren/wiki/数据处理/数据收集/ELK/</id>
-    <published>2018-12-09T03:55:57.000Z</published>
-    <updated>2019-02-23T13:37:57.996Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="https://gitee.com/ppabccn/Hi-elk" rel="external nofollow noopener noreferrer" target="_blank">Docker快速搭建elk服务镜像</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;https://gitee.com/ppabccn/Hi-elk&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Docker快速搭建elk服务镜像&lt;/a&gt;&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-      <category term="数据处理" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"/>
-    
-      <category term="数据收集" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Python常用函数</title>
-    <link href="http://wiki.quartz.ren/wiki/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/Python/%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/"/>
-    <id>http://wiki.quartz.ren/wiki/程序语言/Python/基础操作/</id>
-    <published>2018-12-09T03:55:57.000Z</published>
-    <updated>2019-02-23T13:37:58.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="shape"><a href="#shape" class="headerlink" title="shape"></a>shape</h3><p>读取矩阵的长度.</p><p>shape函数是numpy.core.fromnumeric中的函数，它的功能是读取矩阵的长度，比如shape[0]就是读取矩阵第一维度的长度。<br>shape的输入参数可以是一个整数（表示维度），也可以是一个矩阵。以下例子可能会好理解一些：</p><p><a href="https://blog.csdn.net/qq_28618765/article/details/78081959" rel="external nofollow noopener noreferrer" target="_blank">Python numpy函数：shape用法</a></p><h3 id="mat"><a href="#mat" class="headerlink" title="mat"></a>mat</h3><p>创建矩阵</p><p><a href="https://blog.csdn.net/qq_30638831/article/details/79907684" rel="external nofollow noopener noreferrer" target="_blank">python中的mat的操作</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;shape&quot;&gt;&lt;a href=&quot;#shape&quot; class=&quot;headerlink&quot; title=&quot;shape&quot;&gt;&lt;/a&gt;shape&lt;/h3&gt;&lt;p&gt;读取矩阵的长度.&lt;/p&gt;
-&lt;p&gt;shape函数是numpy.core.fromnumeric中的函数，它的功能是读取
-      
-    
-    </summary>
-    
-      <category term="程序语言" scheme="http://wiki.quartz.ren/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/"/>
-    
-      <category term="Python" scheme="http://wiki.quartz.ren/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/Python/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>其他算法</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%85%B6%E4%BB%96%E7%AE%97%E6%B3%95/"/>
-    <id>http://wiki.quartz.ren/wiki/机器学习/其他算法/</id>
-    <published>2018-12-07T14:55:57.000Z</published>
-    <updated>2019-02-23T13:37:57.997Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="https://github.com/tdebatty/java-string-similarity" rel="external nofollow noopener noreferrer" target="_blank">Java中的字符串相似度</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;https://github.com/tdebatty/java-string-similarity&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Java中的字符串相似度&lt;/a&gt;
-      
-    
-    </summary>
-    
-      <category term="机器学习" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Tcp,Ip及其应用</title>
-    <link href="http://wiki.quartz.ren/wiki/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP-IP%E5%8F%8A%E5%BA%94%E7%94%A8%E9%97%AE%E9%A2%98/"/>
-    <id>http://wiki.quartz.ren/wiki/软件工程/计算机网络/TCP-IP及应用问题/</id>
-    <published>2018-12-04T15:11:57.000Z</published>
-    <updated>2019-02-23T13:37:58.002Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="SocketRead问题"><a href="#SocketRead问题" class="headerlink" title="SocketRead问题"></a>SocketRead问题</h3><p>针对线程处于 at java.net.SocketInputStream.socketRead0(Native Method)  , java.lang.Thread.State: RUNNABLE.</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&quot;http-nio-10251-exec-1213&quot; #86023 daemon prio=5 os_prio=0 tid=0x00007f838c0f8000 nid=0x1f9 runnable [0x00007f83693bd000]</span><br><span class="line">   java.lang.Thread.State: RUNNABLE</span><br><span class="line">at java.net.SocketInputStream.socketRead0(Native Method)</span><br><span class="line">at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)</span><br><span class="line">at java.net.SocketInputStream.read(SocketInputStream.java:171)</span><br><span class="line">at java.net.SocketInputStream.read(SocketInputStream.java:141)</span><br><span class="line">at sun.security.ssl.InputRecord.readFully(InputRecord.java:465)</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure><h3 id="关于TCP交互流程与客户端服务端状态"><a href="#关于TCP交互流程与客户端服务端状态" class="headerlink" title="关于TCP交互流程与客户端服务端状态"></a>关于TCP交互流程与客户端服务端状态</h3><ul><li>TimeWait,CloseWait 有没有问题</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;SocketRead问题&quot;&gt;&lt;a href=&quot;#SocketRead问题&quot; class=&quot;headerlink&quot; title=&quot;SocketRead问题&quot;&gt;&lt;/a&gt;SocketRead问题&lt;/h3&gt;&lt;p&gt;针对线程处于 at java.net.SocketInput
-      
-    
-    </summary>
-    
-      <category term="软件工程" scheme="http://wiki.quartz.ren/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
-    
-      <category term="计算机网络" scheme="http://wiki.quartz.ren/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Kafka问题总结</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/DataStore/Kafka/%E5%85%B3%E4%BA%8E%E6%9C%80%E8%BF%91kafka%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/"/>
-    <id>http://wiki.quartz.ren/wiki/数据处理/DataStore/Kafka/关于最近kafka的几个问题/</id>
-    <published>2018-12-04T15:11:57.000Z</published>
-    <updated>2019-02-23T13:37:57.990Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="consumer提交offset失败"><a href="#consumer提交offset失败" class="headerlink" title="consumer提交offset失败"></a>consumer提交offset失败</h3><p>使用spring-kafka, 配置auto.commit =true 会使用kafka.client的 自动提交机制(5秒钟提交一次-具体细节<strong>TODO</strong>).</p><p>然而一定时间取出的消息没有处理完,长时间没能提交成功???</p><p>现象: offset没有提交成功, consumer的协调者处于dead状态, 恢复后但还能正常消费,但offset一直未能提交.</p><h4 id="Socket一个线程导致消费挂起"><a href="#Socket一个线程导致消费挂起" class="headerlink" title="Socket一个线程导致消费挂起"></a>Socket一个线程导致消费挂起</h4><p>现象: Socket一直处于read状态,导致往队列push消息失败,取出来的消息也没有处理, 没有提交offset.</p><p>可能1. socket read timeout 设置后, 其他线程就处于 Timewait 状态,但是 实际设置connect 超时时间在 socket 超时时间之后, 所以没有超时时间相当于.</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;consumer提交offset失败&quot;&gt;&lt;a href=&quot;#consumer提交offset失败&quot; class=&quot;headerlink&quot; title=&quot;consumer提交offset失败&quot;&gt;&lt;/a&gt;consumer提交offset失败&lt;/h3&gt;&lt;p&gt;使用spri
-      
-    
-    </summary>
-    
-      <category term="数据处理" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"/>
-    
-      <category term="DataStore" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/DataStore/"/>
-    
-      <category term="Kafka" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/DataStore/Kafka/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Logistic回归</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/Logistic%E5%9B%9E%E5%BD%92/"/>
-    <id>http://wiki.quartz.ren/wiki/机器学习/Logistic回归/</id>
-    <published>2018-12-02T14:55:57.000Z</published>
-    <updated>2019-02-23T13:37:57.997Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>回归: 假设有一组数据点,用一条直线对这些点进行拟合,这个拟合过程就是回归.回归一词源于最佳拟合,表示要找到最佳拟合参数.</p><p>训练分类器的做法就是寻找最佳拟合参数.</p><p>使用的一些优化算法: 梯度上升法,最小二乘法.</p><h3 id="最优化算法"><a href="#最优化算法" class="headerlink" title="最优化算法"></a>最优化算法</h3><h4 id="1-最小二乘法"><a href="#1-最小二乘法" class="headerlink" title="1. 最小二乘法"></a>1. 最小二乘法</h4><p>向量运算进行参数求解过程</p><p>损失函数,给定数据X,Y, 根据aX 的出的Y1 与Y之间的偏差,称为损失.怎么将这个损失降到最低.  </p><p>首先定义这损失,线性空间的距离,通过欧几里得距离定义这个损失.</p><p>损失最小化:  对损失函数求导,得到参数方程. 进行参数计算. </p><h4 id="2-梯度下降"><a href="#2-梯度下降" class="headerlink" title="2. 梯度下降"></a>2. 梯度下降</h4><p>为什么梯度下降是必须的?</p><p>最小二乘法参数计算的问题:</p><ul><li>矩阵是否满秩</li><li>运算性能</li></ul><p>梯度下降不仅限于线性回归.</p><p>经过多次的重复, 比直接运算(参数计算)的优点.</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h3&gt;&lt;p&gt;回归: 假设有一组数据点,用一条直线对这些点进行拟合,这个拟合过程就是回归.回归一词源于最佳拟合,表示要找到最佳拟合参数.&lt;/p&gt;
-&lt;p&gt;训
-      
-    
-    </summary>
-    
-      <category term="机器学习" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="MchineLearning" scheme="http://wiki.quartz.ren/tags/MchineLearning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>KNN</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/KNN/"/>
-    <id>http://wiki.quartz.ren/wiki/机器学习/KNN/</id>
-    <published>2018-12-02T03:55:57.000Z</published>
-    <updated>2019-02-23T13:37:57.997Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>简单的说,K-近邻算法采用测量不同特征值之间的距离方法进行分类.</p><p>工作原理: 存在一个样本数据集合, 也称作<strong>训练样本集</strong>, 并且样本集中的每个数据都存在标签(即我们知道样本集中每一数据与所属分类的对应关系),输入没有标签的新数据后.将新数据的每个特征与样本集中数据对应的特征进行比较,然后算法提取样本集中特征最相似数据(最近邻)的分类标签.</p><p>特性: </p><ul><li>优点: 精度高,对异常值不敏感,无数据输入假设</li><li>缺点,计算复杂度高,空间复杂度高</li><li>使用数据范围: 数值型和标称型.</li></ul><h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>使用KNN 分类爱情片和动作片.基于电影中出现的亲吻,打斗出现的次数,使用k-近邻构造程序.</p><p>训练样本集:</p><p>A  打斗镜头: 3     接吻镜头: 104     电影类型 : 爱情片<br>B  打斗镜头: 2     接吻镜头: 100     电影类型 : 爱情片<br>C  打斗镜头: 1     接吻镜头: 81      电影类型 : 爱情片<br>D  打斗镜头: 101   接吻镜头: 10      电影类型 : 动作片<br>E  打斗镜头: 99    接吻镜头: 5       电影类型 : 动作片<br>F  打斗镜头: 98    接吻镜头: 2       电影类型 : 动作片<br>G  打斗镜头: 18    接吻镜头: 90      电影类型 : ?</p><p>已知类型电影 (A,B,C,D,E,F) 与 未知类型电影(G) 的距离如下. 距离怎么定义的?? (二维空间的绝对距离?)</p><p>A   与 G 的距离 : 20.5<br>B   与 G 的距离 : 18.7<br>C   与 G 的距离 : 19.2<br>D   与 G 的距离 : 115.3<br>E   与 G 的距离 : 117.4<br>F   与 G 的距离 : 118.9</p><p>现在得到了样本集中所有电影与未知电影的距离,按照距离递增<strong>排序</strong>, 可以找到k个距离最近的电影.<br>假设k=3, 则最近的三个电影依次为: F,E,D. 而 这三个都是爱情片, 因此我们判断未知电影为爱情片.</p><h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><ul><li>收集数据</li><li>准备数据: 距离计算所需要的数值,最好是结构化的数据格式</li><li>分析数据</li><li>训练算法: k近邻不适用</li><li>测试算法: 计算错误率</li><li>使用算法</li></ul><p>这里只介绍最后的算法使用步骤:实施KNN分类算法.</p><p>主要函数功能为: 使用k-近邻算法将每组数据划分到某个类别中.步骤如下</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">对未知类别属性的数据集中的每个点依次执行以下操作:</span><br><span class="line">1. 计算已知类别数据集中的点与当前点之间的距离</span><br><span class="line">2. 按照距离递增次序排序</span><br><span class="line">3. 选取与当前点距离最小的k个点</span><br><span class="line">4. 确定前k个点所在类别的出现频率 </span><br><span class="line">5. 返回前k个点出现频率最高的类别作为当前点的预测分类.</span><br></pre></td></tr></table></figure><p>python函数如下:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">classify0</span><span class="params">(inX, dataSet, labels, k)</span>:</span></span><br><span class="line">    dataSetSize = dataSet.shape[<span class="number">0</span>]</span><br><span class="line">    // 距离计算</span><br><span class="line">    diffMat = tile(inX, (dataSetSize, <span class="number">1</span>)) - dataSet</span><br><span class="line">    sqDiffMat = diffMat ** <span class="number">2</span></span><br><span class="line">    sqDistances = sqDiffMat.sum(axis=<span class="number">1</span>)</span><br><span class="line">    disstances = sqDistances.argsort()</span><br><span class="line">    classCount=&#123;&#125;</span><br><span class="line">    // 选择距离最小的k个点</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> rang(k):</span><br><span class="line">        voteIlabel = labels[sortedDistIndicies[i]]</span><br><span class="line">        classCount[voteIlabel] = classCount.get(voteIlabel,<span class="number">0</span>) + <span class="number">1</span></span><br><span class="line">    sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(<span class="number">1</span>), reverse=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">return</span> sortedClassCount[<span class="number">0</span>][<span class="number">0</span>]</span><br></pre></td></tr></table></figure><p>其它代码见:<a href="https://github.com/quantumcs/Machine-Learning-In-Action" rel="external nofollow noopener noreferrer" target="_blank">https://github.com/quantumcs/Machine-Learning-In-Action</a></p><h3 id="算法测试"><a href="#算法测试" class="headerlink" title="算法测试"></a>算法测试</h3><h3 id="有关数据收集"><a href="#有关数据收集" class="headerlink" title="有关数据收集"></a>有关数据收集</h3><ul><li>文本数据的转换及处理<br>etc.</li></ul><h3 id="其它的一些应用"><a href="#其它的一些应用" class="headerlink" title="其它的一些应用"></a>其它的一些应用</h3><ul><li>约会网站的配对</li><li>手写识别系统</li></ul><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><h4 id="1-一个简单的模型-存在的问题"><a href="#1-一个简单的模型-存在的问题" class="headerlink" title="1. 一个简单的模型,存在的问题"></a>1. 一个简单的模型,存在的问题</h4><p>现有一个模型, 针对每个新的句子,使用相似度算出与已知样本集中每个句子的相似度. 而已知样本集只有一个类别(也就是说都是负样本). 取最大的相似度值,和阈值比较,大于阈值的定义同一个类别,小于阈值的定为不同类别.</p><p>存在的问题: 1. 没有考虑正样本,这个策略效果肯定存在提升. 2. 另外的提升思路: 对句子做预处理,去除变化较大的实体,降低对相似性的影响.</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h3&gt;&lt;p&gt;简单的说,K-近邻算法采用测量不同特征值之间的距离方法进行分类.&lt;/p&gt;
-&lt;p&gt;工作原理: 存在一个样本数据集合, 也称作&lt;strong&gt;训
-      
-    
-    </summary>
-    
-      <category term="机器学习" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="MchineLearning" scheme="http://wiki.quartz.ren/tags/MchineLearning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>AdaBoost算法</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%88%A9%E7%94%A8AdaBoost%E5%85%83%E7%AE%97%E6%B3%95%E6%8F%90%E9%AB%98%E5%88%86%E7%B1%BB%E6%80%A7%E8%83%BD/"/>
-    <id>http://wiki.quartz.ren/wiki/机器学习/利用AdaBoost元算法提高分类性能/</id>
-    <published>2018-12-02T03:55:57.000Z</published>
-    <updated>2019-02-23T13:37:57.998Z</updated>
-    
-    <content type="html"><![CDATA[<ul><li>组合相似的分类器来提高分类性能</li><li>应用AdaBoost算法</li><li>处理非均衡分类问题</li></ul><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>元算法: 对其他算法进行组合的一种方式. 代表-AdaBoost</p><p>不同分类器的集成方法:</p><ul><li>boosting方法(代表-AdaBoost)</li></ul><blockquote><p>非均衡分类问题</p></blockquote><h3 id="基于数据集多重抽样的分类器"><a href="#基于数据集多重抽样的分类器" class="headerlink" title="基于数据集多重抽样的分类器"></a>基于数据集多重抽样的分类器</h3><p>学习了常见的分类算法:KNN,决策树,朴素贝叶斯,logistic回归.他们各有优缺点,可以将不同的分类器进行组合,而这种组合结果就被称为集成方法或者元算法.</p><h4 id="1-bagging"><a href="#1-bagging" class="headerlink" title="1. bagging"></a>1. bagging</h4><p>基于数据随机重抽样的分类器构建方法</p><p>是从原始数据集选择S次后得到S个数据集的一种技术,新数据集和原数据集的大小相等.</p><p>一种先进的bagging方法 - 随机森林</p><h4 id="2-boosting"><a href="#2-boosting" class="headerlink" title="2. boosting"></a>2. boosting</h4><p>类似bagging技术. 不管是boosting还是bagging,所使用的多个分类器的类型都是一致的,但是在前者当中,不同分类器是通过串行训练而获得的,每个新分类器都根据已训练出的分类器的性能进行训练.</p><p>boosting是通过集中关注被已有分类器错分的那些数据来获得新的分类器.</p><p>由于boosting分类的结果是基于所有分类器的加权求和结果的,因此boosting与bagging不太一样.</p><p>bagging中的分类器权重是相等的,而boosting中的分类器权重并不相等,每个权重代表的是其对应分类器在上一轮迭代中的成功度.</p><p>boosting方法拥有多个版本,本文只关注一个最流行的版本AdaBoost.</p><h3 id="AdaBoost"><a href="#AdaBoost" class="headerlink" title="AdaBoost"></a>AdaBoost</h3><p>一般流程</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 收集数据</span><br><span class="line">2. 准备数据: 依赖于所使用的弱分类器类型,比如单层决策树,这种分类器可以处理任何数据类型.(作为弱分类器,简单分类器的效果更好)</span><br><span class="line">3. 分析数据</span><br><span class="line">4. 训练算法: AdaBoost的大部分时间都用在训练上,分类器将多次在同一数据集上训练弱分类器</span><br><span class="line">5. 测试算法: 计算分类的错误率</span><br><span class="line">6. 使用算法:同SVM一样,AdaBoost预测两个类别中的一个.如果想把它应用到多个类别的场合,那么就要像多累SVM中的做法一样对AdaBoost进行修改</span><br></pre></td></tr></table></figure><p>关于分类性能度量指标:正确率\召回率及ROC曲线. 128p.</p><p>基于代价函数的分类器决策控制. p131</p><p>处理非均衡问题的数据抽样方法 p132</p><p>代码:<a href="https://github.com/quantumcs/Machine-Learning-In-Action/tree/master/Ch07" rel="external nofollow noopener noreferrer" target="_blank">https://github.com/quantumcs/Machine-Learning-In-Action/tree/master/Ch07</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;ul&gt;
-&lt;li&gt;组合相似的分类器来提高分类性能&lt;/li&gt;
-&lt;li&gt;应用AdaBoost算法&lt;/li&gt;
-&lt;li&gt;处理非均衡分类问题&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;
-      
-    
-    </summary>
-    
-      <category term="机器学习" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="MchineLearning" scheme="http://wiki.quartz.ren/tags/MchineLearning/"/>
     
   </entry>
   

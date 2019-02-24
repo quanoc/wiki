@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>Python客户端创建索引 | Nova`s Wiki</title>
+    
+    
+        <meta name="keywords" content="elasticsearch">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="安装elasticsearch模块 进入python交互界面 引入es的模块 1from elasticsearch import Elasticsearch  定义es链接及变量 12doc_type = &amp;apos;log&amp;apos;es = Elasticsearch(urls = [&amp;apos;http://192.168.1.108:9200&amp;apos;,&amp;apos;http://19">
+<meta name="keywords" content="elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python客户端创建索引">
+<meta property="og:url" content="http://wiki.quartz.ren/wiki/工具组件/Elasticsearch/Python客户端创建索引/index.html">
+<meta property="og:site_name" content="Nova`s Wiki">
+<meta property="og:description" content="安装elasticsearch模块 进入python交互界面 引入es的模块 1from elasticsearch import Elasticsearch  定义es链接及变量 12doc_type = &amp;apos;log&amp;apos;es = Elasticsearch(urls = [&amp;apos;http://192.168.1.108:9200&amp;apos;,&amp;apos;http://19">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-02-24T02:41:30.119Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python客户端创建索引">
+<meta name="twitter:description" content="安装elasticsearch模块 进入python交互界面 引入es的模块 1from elasticsearch import Elasticsearch  定义es链接及变量 12doc_type = &amp;apos;log&amp;apos;es = Elasticsearch(urls = [&amp;apos;http://192.168.1.108:9200&amp;apos;,&amp;apos;http://19">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="Nova`s Wiki" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/wiki/favicon.ico">
+    
+
+    <link rel="stylesheet" href="/wiki/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/wiki/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/wiki/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/wiki/css/style.css">
+    <script src="/wiki/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/wiki/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/wiki/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?9088151460061a7c449bb9d5a3209fbc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/wiki/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">Nova`s Wiki</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/wiki/">首页</a>
+                
+                    <a class="main-nav-link" href="/wiki/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/wiki/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/wiki/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/wiki/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/wiki/',
+        CONTENT_URL: '/wiki/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/wiki/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/wiki/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/wiki/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap" id="categories">
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id="allExpand" href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            MicroService
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术框架
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Netty
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/Netty/Netty学习目录/">Netty学习目录</a></li>  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/Netty/读写事件流程分析与相关API/">读写事件流程分析与相关API</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            SpringBoot
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/MicroService/技术框架/SpringBoot/Readme/">SpringBoot</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            工具组件
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            ActiveMQ
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/ActiveMQ/ActiveMQ介绍/">ActiveMQ介绍</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/ActiveMQ/ActiveMQ分享/">ActiveMQ分享</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Builder
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Builder/sbt/">sbt了解</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Docker
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Docker/1.Ubuntu16安装Docker环境/">Ubuntu16安装Docker环境</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/2.Docker环境使用MySQL/">Docker环境Mysql使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/3.Docker环境其他中间件使用/">Docker环境其他中间件使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/4.Dockerfile语法/">Dockerfile语法</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/5.Docker镜像仓库搭建/">Docker 仓库搭建</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/6.Docker网络/">Docker NetWork</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/7.系统镜像/">系统镜像</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Docker/8.Docker其他/">Docker相关</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            Elasticsearch
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Elasticsearch/1.ES环境搭建/">ES环境搭建</a></li>  <li class="file active"><a href="/wiki/wiki/工具组件/Elasticsearch/Python客户端创建索引/">Python客户端创建索引</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            IDE
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/IDE/Git学习/">Jenkins项目常用配置</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/IDE/开发工具/">开发工具</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Jenkins
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/1.Jenkins认识/">Jenkins认识</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/2.Jenkins安装配置/">Jenkins安装配置</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/3.Jenkins插件使用/">Jenkins插件使用</a></li>  <li class="file"><a href="/wiki/wiki/工具组件/Jenkins/4.Jenkins项目常用配置/">Jenkins项目常用配置</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            前端方案
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/工具组件/前端方案/前端框架记录/">前端框架</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            数据处理
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            DataStore
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Elasticsearch
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES介绍/">ES介绍</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES基础/">ES基础</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES权限设置/"></a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/ES常用api/">ES常用API</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Elasticsearch/Logstash安装/">Logstash安装</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Hadoop
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Hadoop/Hadoop学习资料/">Hadoop学习资料</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Kafka
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kafka环境搭建/">Kafak环境搭建</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/Kakfa监控/">Kafak监控</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于kafka的offset存储/">关于kafka的offset存储</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Kafka/关于最近kafka的几个问题/">Kafka问题总结</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Mongo
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/使用python添加数据到Mongo/">使用python添加数据到mongo</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Mongo/Mongo基础/">Mongo基础</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Oracle
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Oracle/Oracle批量测试数据生成/">Oracle批量测试数据生成</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Redis
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/DataStore/Redis/Redis常用操作/">Redis常用操作</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            技术文章
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/技术文章/Start/">数据处理相关</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            数据收集
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/数据收集/ELK/">ELK</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            组件安装配置
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Hadoop组件安装
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/1.配置ssh免密登录/">ssh免密登录</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/3.HBase伪集群模式安装/">HBase伪集群模式安装</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/">常用操作命令与问题记录</a></li>  <li class="file"><a href="/wiki/wiki/数据处理/组件安装配置/Hadoop组件安装/2.伪集群模式安装/">伪集群模式安装</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            机器学习
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/机器学习/1.机器学习认识/">机器学习认识</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/3.Logistic回归/">Logistic回归</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/2.KNN/">KNN</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/4.利用AdaBoost元算法提高分类性能/">AdaBoost算法</a></li>  <li class="file"><a href="/wiki/wiki/机器学习/5.其他算法/">其他算法</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            生活学习
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/生活学习/在看的书和文章/">在看的书和文章</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            程序语言
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Python
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Python/Python语法学习笔记/">Python学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/模块安装/">pip 模块安装</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Python/基础操作/">Python常用函数</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Scala
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/程序语言/Scala/Scala入门/">Scala学习</a></li>  <li class="file"><a href="/wiki/wiki/程序语言/Scala/使用maven构建scala项目/">Scala项目构建</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            软件工程
+                        </a>
+                         <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            Linux
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/Linux/ubuntu挂载samba/">ubunut 挂载samba</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            计算机网络
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/计算机网络/TCP-IP及应用问题/">Tcp,Ip及其应用</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            问题
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/wiki/wiki/软件工程/问题/关于非技术类的几个问题/"></a></li>  </ul> 
+                    </li> 
+                     </ul> 
+                    </li> 
+                     <li class="file"><a href="/wiki/wiki/WikiStart/">Wiki Start</a></li>  </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-工具组件/Elasticsearch/Python客户端创建索引" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/wiki/categories/工具组件/">工具组件</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/wiki/categories/工具组件/Elasticsearch/">Elasticsearch</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/wiki/tags/elasticsearch/">elasticsearch</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/wiki/wiki/工具组件/Elasticsearch/Python客户端创建索引/">
+            <time datetime="2018-11-16T17:13:34.000Z" itemprop="datePublished">2018-11-17</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Python客户端创建索引
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                <div id="toc" class="toc-article">
+                <strong class="toc-title">Catalogue</strong>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#验证"><span class="toc-number">1.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完整脚本"><span class="toc-number">2.</span> <span class="toc-text">完整脚本</span></a></li></ol>
+                </div>
+            
+        
+        
+            <ul>
+<li>安装elasticsearch模块</li>
+<li>进入python交互界面</li>
+<li><p>引入es的模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from elasticsearch import Elasticsearch</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义es链接及变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">doc_type = &apos;log&apos;</span><br><span class="line">es = Elasticsearch(urls = [&apos;http://192.168.1.108:9200&apos;,&apos;http://192.168.1.106:9200&apos;], timeout = 60, max_retries = 0)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置mapping</p>
+</li>
+<li>创建索引<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">es.index(index = &apos;app-log&apos;, doc_type=&apos;log&apos;, body = mapping)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">mapping = &#123;</span><br><span class="line">        &apos;settings&apos;: &#123;</span><br><span class="line">            &apos;index&apos;: &#123;</span><br><span class="line">                &apos;number_of_replicas&apos;: 1,</span><br><span class="line">                &apos;number_of_shards&apos;: 6,</span><br><span class="line">                &apos;refresh_interval&apos;: &apos;5s&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &apos;mappings&apos;: &#123;</span><br><span class="line">            &apos;_default_&apos;: &#123;</span><br><span class="line">                &apos;_all&apos;: &#123;</span><br><span class="line">                    &apos;enabled&apos;: False</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            doc_type : &#123;</span><br><span class="line">                &apos;properties&apos; : &#123;</span><br><span class="line">                    &apos;day&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;time&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;nanoTime&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;created&apos;: &#123; &apos;type&apos;: &apos;date&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;app&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;host&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;thread&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;level&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;eventType&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;pack&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;clazz&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;line&apos;: &#123; &apos;type&apos;: &apos;string&apos;, &apos;index&apos;: &apos;not_analyzed&apos;&#125;,</span><br><span class="line">                    &apos;messageSmart&apos;: &#123; &apos;type&apos;: &apos;text&apos;, &apos;analyzer&apos;: &apos;ik_smart&apos;, &apos;search_analyzer&apos;: &apos;ik_smart&apos;, &apos;include_in_all&apos;: &apos;true&apos;, &apos;boost&apos;: 8&#125;,</span><br><span class="line">                    &apos;messageMax&apos;: &#123; &apos;type&apos;: &apos;text&apos;, &apos;analyzer&apos;: &apos;ik_max_word&apos;, &apos;search_analyzer&apos;: &apos;ik_max_word&apos;, &apos;include_in_all&apos;: &apos;true&apos;, &apos;boost&apos;: 8&#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl &apos;192.168.1.108:9200/_cat/indices?v&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="完整脚本"><a href="#完整脚本" class="headerlink" title="完整脚本"></a>完整脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: UTF-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">from</span> pyelasticsearch <span class="keyword">import</span> ElasticSearch</span><br><span class="line"><span class="keyword">from</span> pyelasticsearch <span class="keyword">import</span> bulk_chunks</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(argv)</span>:</span></span><br><span class="line">    doc_type = <span class="string">'log'</span></span><br><span class="line">    index = <span class="string">'app-log'</span></span><br><span class="line">    es = ElasticSearch(urls = [<span class="string">'http://192.168.1.108:9200'</span>], timeout = <span class="number">60</span>, max_retries = <span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    mapping = &#123;</span><br><span class="line">        <span class="string">'settings'</span>: &#123;</span><br><span class="line">            <span class="string">'index'</span>: &#123;</span><br><span class="line">                <span class="string">'number_of_replicas'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'number_of_shards'</span>: <span class="number">6</span>,</span><br><span class="line">                <span class="string">'refresh_interval'</span>: <span class="string">'5s'</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'mappings'</span>: &#123;</span><br><span class="line">            <span class="string">'_default_'</span>: &#123;</span><br><span class="line">                <span class="string">'_all'</span>: &#123;</span><br><span class="line">                    <span class="string">'enabled'</span>: <span class="keyword">False</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            doc_type : &#123;</span><br><span class="line">                <span class="string">'properties'</span> : &#123;</span><br><span class="line">                    <span class="string">'day'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'time'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'nanoTime'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'created'</span>: &#123; <span class="string">'type'</span>: <span class="string">'date'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'app'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'host'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'thread'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'level'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'eventType'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'pack'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'clazz'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;,</span><br><span class="line">                    <span class="string">'line'</span>: &#123; <span class="string">'type'</span>: <span class="string">'string'</span>, <span class="string">'index'</span>: <span class="string">'not_analyzed'</span>&#125;</span><br><span class="line">                   <span class="comment"># 'messageSmart': &#123; 'type': 'string', 'analyzer': 'ik_smart', 'search_analyzer': 'ik_smart', 'include_in_all': 'true', 'boost': 8&#125;,</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    es.create_index(index = index, settings = mapping)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main(sys.argv)</span><br></pre></td></tr></table></figure>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/wiki/wiki/工具组件/Elasticsearch/1.ES环境搭建/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    ES环境搭建
+                
+            </div>
+        </a>
+    
+    
+        <a href="/wiki/wiki/工具组件/Jenkins/1.Jenkins认识/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Jenkins认识</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            Nova &copy; 2019 
+            <a rel="external nofollow noopener noreferrer" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png"></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" rel="external nofollow noopener noreferrer" target="_blank">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        <script src="/wiki/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/wiki/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/wiki/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/wiki/js/main.js"></script>
+
+    </div>
+</body>
