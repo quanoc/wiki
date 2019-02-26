@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://wiki.quartz.ren/wiki/%E7%BC%96%E7%A8%8B%E7%9B%B8%E5%85%B3/%E5%93%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B/</loc>
+    
+    <lastmod>2019-02-26T15:44:10.141Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/README/</loc>
+    
+    <lastmod>2019-02-24T10:06:57.254Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/201902/</loc>
+    
+    <lastmod>2019-02-24T10:06:33.273Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/IDE/Git%E5%AD%A6%E4%B9%A0/</loc>
     
     <lastmod>2019-02-24T02:55:00.676Z</lastmod>
@@ -275,14 +296,14 @@
   </url>
   
   <url>
-    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/2.KNN/</loc>
+    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/3.Logistic%E5%9B%9E%E5%BD%92/</loc>
     
     <lastmod>2019-02-23T13:37:57.997Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/3.Logistic%E5%9B%9E%E5%BD%92/</loc>
+    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/2.KNN/</loc>
     
     <lastmod>2019-02-23T13:37:57.997Z</lastmod>
     
