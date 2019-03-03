@@ -6,7 +6,7 @@
   <link href="/wiki/atom.xml" rel="self"/>
   
   <link href="http://wiki.quartz.ren/"/>
-  <updated>2019-02-28T16:44:14.158Z</updated>
+  <updated>2019-03-03T09:48:36.771Z</updated>
   <id>http://wiki.quartz.ren/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>简单线性回归实现</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0100%E5%A4%A9/002.%E7%AE%80%E5%8D%95%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://wiki.quartz.ren/wiki/机器学习/机器学习100天/002.简单线性回归实现/</id>
+    <published>2019-03-03T15:55:57.000Z</published>
+    <updated>2019-03-03T09:48:36.771Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="第一步：数据预处理"><a href="#第一步：数据预处理" class="headerlink" title="第一步：数据预处理"></a>第一步：数据预处理</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">dataset = pd.read_csv(<span class="string">'studentscores.csv'</span>)</span><br><span class="line">X = dataset.iloc[ : ,   : <span class="number">1</span> ].values</span><br><span class="line">Y = dataset.iloc[ : , <span class="number">1</span> ].values</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line">X_train, X_test, Y_train, Y_test = train_test_split( X, Y, test_size = <span class="number">1</span>/<span class="number">4</span>, random_state = <span class="number">0</span>)</span><br></pre></td></tr></table></figure><h3 id="第二步：训练集使用简单线性回归模型来训练"><a href="#第二步：训练集使用简单线性回归模型来训练" class="headerlink" title="第二步：训练集使用简单线性回归模型来训练"></a>第二步：训练集使用简单线性回归模型来训练</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line">regressor = LinearRegression()</span><br><span class="line">regressor = regressor.fit(X_train, Y_train)</span><br></pre></td></tr></table></figure><h3 id="第三步：预测结果"><a href="#第三步：预测结果" class="headerlink" title="第三步：预测结果"></a>第三步：预测结果</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Y_pred = regressor.predict(X_test)</span><br></pre></td></tr></table></figure><h3 id="第四步：可视化"><a href="#第四步：可视化" class="headerlink" title="第四步：可视化"></a>第四步：可视化</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> KFold</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dataset = pd.read_csv(<span class="string">'~/Documents/100-Days-Of-ML-Code/datasets/studentscores.csv'</span>)</span><br><span class="line">X = dataset.iloc[ : ,   : <span class="number">1</span> ].values</span><br><span class="line">Y = dataset.iloc[ : , <span class="number">1</span> ].values</span><br><span class="line"></span><br><span class="line">X_train, X_test, Y_train, Y_test = train_test_split( X, Y, test_size = <span class="number">1</span>/<span class="number">4</span>, random_state = <span class="number">0</span>) </span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line">regressor = LinearRegression()</span><br><span class="line">regressor = regressor.fit(X_train, Y_train)</span><br><span class="line"></span><br><span class="line">Y_pred = regressor.predict(X_test)</span><br><span class="line"></span><br><span class="line">plt.scatter(X_train , Y_train, color = <span class="string">'red'</span>)</span><br><span class="line">plt.plot(X_train , regressor.predict(X_train), color =<span class="string">'blue'</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line">plt.scatter(X_test , Y_test, color = <span class="string">'red'</span>)</span><br><span class="line">plt.plot(X_test , regressor.predict(X_test), color =<span class="string">'blue'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;第一步：数据预处理&quot;&gt;&lt;a href=&quot;#第一步：数据预处理&quot; class=&quot;headerlink&quot; title=&quot;第一步：数据预处理&quot;&gt;&lt;/a&gt;第一步：数据预处理&lt;/h3&gt;&lt;figure class=&quot;highlight py&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td c
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="机器学习100天" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0100%E5%A4%A9/"/>
+    
+    
+      <category term="MchineLearning" scheme="http://wiki.quartz.ren/tags/MchineLearning/"/>
+    
+  </entry>
   
   <entry>
     <title>数据预处理</title>
@@ -71,33 +98,6 @@
   </entry>
   
   <entry>
-    <title>201902</title>
-    <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/201902/"/>
-    <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/201902/</id>
-    <published>2019-02-24T01:56:24.000Z</published>
-    <updated>2019-02-24T10:06:33.273Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="20190224"><a href="#20190224" class="headerlink" title="20190224"></a>20190224</h3>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;20190224&quot;&gt;&lt;a href=&quot;#20190224&quot; class=&quot;headerlink&quot; title=&quot;20190224&quot;&gt;&lt;/a&gt;20190224&lt;/h3&gt;
-      
-    
-    </summary>
-    
-      <category term="生活学习" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/"/>
-    
-      <category term="TODOLIST" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/"/>
-    
-    
-      <category term="todo" scheme="http://wiki.quartz.ren/tags/todo/"/>
-    
-  </entry>
-  
-  <entry>
     <title>TODOLIST</title>
     <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/README/"/>
     <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/README/</id>
@@ -115,6 +115,33 @@
 &lt;li&gt;一篇英语文章&lt;/li&gt;
 &lt;li&gt;一个技术小技巧&lt;/li&gt;
 &lt;li&gt;一个观点分享&lt;/
+      
+    
+    </summary>
+    
+      <category term="生活学习" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="TODOLIST" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/"/>
+    
+    
+      <category term="todo" scheme="http://wiki.quartz.ren/tags/todo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>201902</title>
+    <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/201902/"/>
+    <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/201902/</id>
+    <published>2019-02-24T01:56:24.000Z</published>
+    <updated>2019-02-24T10:06:33.273Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="20190224"><a href="#20190224" class="headerlink" title="20190224"></a>20190224</h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;20190224&quot;&gt;&lt;a href=&quot;#20190224&quot; class=&quot;headerlink&quot; title=&quot;20190224&quot;&gt;&lt;/a&gt;20190224&lt;/h3&gt;
       
     
     </summary>
@@ -215,19 +242,21 @@
   </entry>
   
   <entry>
-    <title>HBase伪集群模式安装</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/3.HBase%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E5%AE%89%E8%A3%85/"/>
-    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/3.HBase伪集群模式安装/</id>
+    <title>常用操作命令与问题记录</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/4.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E4%B8%8E%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/</id>
     <published>2019-02-16T04:56:24.000Z</published>
-    <updated>2019-02-24T02:20:30.498Z</updated>
+    <updated>2019-02-24T02:21:51.913Z</updated>
     
-    <content type="html"><![CDATA[<p>同Hadoop安装，到<br><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a>下载hbase。选择 hbase-1.0.0-cdh5.4.0.tar.gz</p><blockquote><p>hbase伪分布式模式是基于hdfs环境的</p></blockquote><p>因此，在安装hadoop的前提下，我们配置Hbase的伪分布式模式如下：</p><ul><li>1.下载并解压</li><li>2.配置环境变量（可选）</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bashrc</span><br><span class="line">#添加</span><br><span class="line">export  PATH=$PATH:/opt/app/skyeye/hbase-1.0.0-cdh5.4.0/bin</span><br><span class="line">. ~/.bashrc</span><br><span class="line">#验证</span><br><span class="line">hbase version</span><br></pre></td></tr></table></figure><h3 id="伪集群模式配置"><a href="#伪集群模式配置" class="headerlink" title="伪集群模式配置"></a>伪集群模式配置</h3><ul><li>1.配置 conf/hbase-env.sh<br>将JAVA_HOME变量设置为本机jdk路径。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/tools/jdk1.8.0_131  #配置本机的java安装根目录</span><br><span class="line">export HBASE_MANAGES_ZK=true       #配置使用hbase自带的zookeeper，不使用自己搭建的zookeeper</span><br></pre></td></tr></table></figure><p>如果使用 export HBASE_MANAGES_ZK=true， 即配置不使用hbase自带的zookeeper，使用自己搭建的zookeeper</p><blockquote><p>hbase可以使用自定义zookeeper管理，也可以使用自带的zookeeper。</p></blockquote><ul><li>2.配置conf/hbase-site.xml<br>修改hbase.rootdir,将其指向hdfs，并指定Hbase在HDFS上的存储路径。<br>将hbase.cluster.distributed设置为true。<br>添加zk的节点地址。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line"> &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://localhost:9000/hbase&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"> &lt;!--以下信息只有在使用自己搭建的zk时添加--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">     &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</span><br><span class="line">     &lt;value&gt;cdhnode1,cdhnode2,cdhnode3&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">    &lt;!--默认为/tmp/目录下--&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/opt/app/skyeye/data/hbasetmp/&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure><ul><li>3.启动HBase</li></ul><p>完成上述操作之后，启动HBase，需要先启动Hadoop。</p><p>启动及检查：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:~$ start-all.sh </span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps</span><br><span class="line">9250 ResourceManager</span><br><span class="line">9683 Jps</span><br><span class="line">9365 NodeManager</span><br><span class="line">9110 SecondaryNameNode</span><br><span class="line">8935 DataNode</span><br><span class="line">8795 NameNode</span><br></pre></td></tr></table></figure><p>上述则Hadoop启动成功。</p><blockquote><p>当前版本。使用start-all.sh启动hadoop时会提示以下信息，所以建议分别启动hdfs和yarn。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This script is Deprecated. Instead use start-dfs.sh and start-yarn.sh</span><br></pre></td></tr></table></figure><p>之后启动HBase，启动及检查</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">start-hbase.sh          # 启动Hbase</span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps        # 检查</span><br><span class="line">3728 Jps</span><br><span class="line">3123 HRegionServer</span><br><span class="line">2407 NodeManager</span><br><span class="line">1961 DataNode</span><br><span class="line">2298 ResourceManager</span><br><span class="line">3004 HMaster</span><br><span class="line">1852 NameNode</span><br><span class="line">2158 SecondaryNameNode</span><br><span class="line">2943 HQuorumPeer</span><br></pre></td></tr></table></figure><p>以上几个进程说明Hbase启动成功。</p><ul><li>4.Hbase操作    </li></ul><p>可以进入shell模式，通过命令行操作查看hbase数据库信息。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hbase shell    #进入shell模式</span><br><span class="line">list    # 查看当前数据库所有表信息</span><br><span class="line">describe &apos;member&apos;    # 查看表结构</span><br><span class="line"># 创建一个member表，其拥有member_id,address,info三个列族</span><br><span class="line">create &apos;member&apos;,&apos;member_id&apos;,&apos;address&apos;,&apos;info&apos;</span><br></pre></td></tr></table></figure><ul><li>5.查看HDFS的HBase数据库文件</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:～$ hadoop fs -ls /hbase</span><br><span class="line">17/10/28 20:45:14 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Found 6 items</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/.tmp</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/WALs</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/data</span><br><span class="line">-rw-r--r--   3 nova supergroup         42 2017-10-28 00:03 /hbase/hbase.id</span><br><span class="line">-rw-r--r--   3 nova supergroup          7 2017-10-28 00:03 /hbase/hbase.version</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:14 /hbase/oldWALs</span><br></pre></td></tr></table></figure><ul><li>6.停止HBase</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop-hbase.sh    #停止Hbase</span><br></pre></td></tr></table></figure><p>问题：停止hbase时，HRegionServer进程不能停止。会导致下次启动hbase时出错。</p><p>原因:</p><h3 id="HBase的用户界面"><a href="#HBase的用户界面" class="headerlink" title="HBase的用户界面"></a>HBase的用户界面</h3><ul><li>yarn: <a href="http://192.168.1.20:8088/cluster" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:8088/cluster</a></li><li><p>hdfs状态: <a href="http://192.168.1.20:50070/dfshealth.html#tab-overview" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:50070/dfshealth.html#tab-overview</a></p></li><li><p>Master: <a href="http://192.168.1.20:60010/master.jsp" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:60010/master.jsp</a></p></li></ul>]]></content>
+    <content type="html"><![CDATA[<ul><li><p>启动hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-dfs.sh</span><br><span class="line">start-yarn.sh</span><br></pre></td></tr></table></figure></li><li><p>停止hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stop-dfs.sh</span><br><span class="line">stop-yarn.sh</span><br></pre></td></tr></table></figure></li></ul><blockquote><p>启动或停止所有，即：HDFS和Yarn</p></blockquote><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><h3 id="一、dfs的端口9000不通"><a href="#一、dfs的端口9000不通" class="headerlink" title="一、dfs的端口9000不通"></a>一、dfs的端口9000不通</h3><p>原因：忘记格式化hdfs。</p><p>启动顺序</p><ul><li>1.启动hdfs</li><li>2.启动yarn</li><li>3.启动hbase</li></ul><h3 id="二、查看hbase在hdfs中目录时"><a href="#二、查看hbase在hdfs中目录时" class="headerlink" title="二、查看hbase在hdfs中目录时"></a>二、查看hbase在hdfs中目录时</h3><p>使用hadoop fs -ls /hbase查看hbase目录，出现以下信息：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">17/10/28 22:25:28 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br></pre></td></tr></table></figure><ul><li>hbase 可以配置使用本地文件系统（一般单击模式），也可以使用hdfs（伪集群或集群模式）</li><li>hbase 可以配置使用自己安装的zk，也可以使用自带的zk。</li></ul><p>hadoop的name、data文件夹下存放什么？</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;同Hadoop安装，到&lt;br&gt;&lt;a href=&quot;http://archive.cloudera.com/cdh5/cdh/5/&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;CDH版下载地址&lt;/a&gt;
+        &lt;ul&gt;
+&lt;li&gt;&lt;p&gt;启动hadoop&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line
       
     
     </summary>
@@ -246,21 +275,19 @@
   </entry>
   
   <entry>
-    <title>常用操作命令与问题记录</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/4.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E4%B8%8E%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
-    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/</id>
+    <title>HBase伪集群模式安装</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/3.HBase%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E5%AE%89%E8%A3%85/"/>
+    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/3.HBase伪集群模式安装/</id>
     <published>2019-02-16T04:56:24.000Z</published>
-    <updated>2019-02-24T02:21:51.913Z</updated>
+    <updated>2019-02-24T02:20:30.498Z</updated>
     
-    <content type="html"><![CDATA[<ul><li><p>启动hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-dfs.sh</span><br><span class="line">start-yarn.sh</span><br></pre></td></tr></table></figure></li><li><p>停止hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stop-dfs.sh</span><br><span class="line">stop-yarn.sh</span><br></pre></td></tr></table></figure></li></ul><blockquote><p>启动或停止所有，即：HDFS和Yarn</p></blockquote><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><h3 id="一、dfs的端口9000不通"><a href="#一、dfs的端口9000不通" class="headerlink" title="一、dfs的端口9000不通"></a>一、dfs的端口9000不通</h3><p>原因：忘记格式化hdfs。</p><p>启动顺序</p><ul><li>1.启动hdfs</li><li>2.启动yarn</li><li>3.启动hbase</li></ul><h3 id="二、查看hbase在hdfs中目录时"><a href="#二、查看hbase在hdfs中目录时" class="headerlink" title="二、查看hbase在hdfs中目录时"></a>二、查看hbase在hdfs中目录时</h3><p>使用hadoop fs -ls /hbase查看hbase目录，出现以下信息：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">17/10/28 22:25:28 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br></pre></td></tr></table></figure><ul><li>hbase 可以配置使用本地文件系统（一般单击模式），也可以使用hdfs（伪集群或集群模式）</li><li>hbase 可以配置使用自己安装的zk，也可以使用自带的zk。</li></ul><p>hadoop的name、data文件夹下存放什么？</p>]]></content>
+    <content type="html"><![CDATA[<p>同Hadoop安装，到<br><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a>下载hbase。选择 hbase-1.0.0-cdh5.4.0.tar.gz</p><blockquote><p>hbase伪分布式模式是基于hdfs环境的</p></blockquote><p>因此，在安装hadoop的前提下，我们配置Hbase的伪分布式模式如下：</p><ul><li>1.下载并解压</li><li>2.配置环境变量（可选）</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bashrc</span><br><span class="line">#添加</span><br><span class="line">export  PATH=$PATH:/opt/app/skyeye/hbase-1.0.0-cdh5.4.0/bin</span><br><span class="line">. ~/.bashrc</span><br><span class="line">#验证</span><br><span class="line">hbase version</span><br></pre></td></tr></table></figure><h3 id="伪集群模式配置"><a href="#伪集群模式配置" class="headerlink" title="伪集群模式配置"></a>伪集群模式配置</h3><ul><li>1.配置 conf/hbase-env.sh<br>将JAVA_HOME变量设置为本机jdk路径。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/tools/jdk1.8.0_131  #配置本机的java安装根目录</span><br><span class="line">export HBASE_MANAGES_ZK=true       #配置使用hbase自带的zookeeper，不使用自己搭建的zookeeper</span><br></pre></td></tr></table></figure><p>如果使用 export HBASE_MANAGES_ZK=true， 即配置不使用hbase自带的zookeeper，使用自己搭建的zookeeper</p><blockquote><p>hbase可以使用自定义zookeeper管理，也可以使用自带的zookeeper。</p></blockquote><ul><li>2.配置conf/hbase-site.xml<br>修改hbase.rootdir,将其指向hdfs，并指定Hbase在HDFS上的存储路径。<br>将hbase.cluster.distributed设置为true。<br>添加zk的节点地址。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line"> &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://localhost:9000/hbase&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"> &lt;!--以下信息只有在使用自己搭建的zk时添加--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">     &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</span><br><span class="line">     &lt;value&gt;cdhnode1,cdhnode2,cdhnode3&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">    &lt;!--默认为/tmp/目录下--&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/opt/app/skyeye/data/hbasetmp/&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure><ul><li>3.启动HBase</li></ul><p>完成上述操作之后，启动HBase，需要先启动Hadoop。</p><p>启动及检查：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:~$ start-all.sh </span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps</span><br><span class="line">9250 ResourceManager</span><br><span class="line">9683 Jps</span><br><span class="line">9365 NodeManager</span><br><span class="line">9110 SecondaryNameNode</span><br><span class="line">8935 DataNode</span><br><span class="line">8795 NameNode</span><br></pre></td></tr></table></figure><p>上述则Hadoop启动成功。</p><blockquote><p>当前版本。使用start-all.sh启动hadoop时会提示以下信息，所以建议分别启动hdfs和yarn。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This script is Deprecated. Instead use start-dfs.sh and start-yarn.sh</span><br></pre></td></tr></table></figure><p>之后启动HBase，启动及检查</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">start-hbase.sh          # 启动Hbase</span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps        # 检查</span><br><span class="line">3728 Jps</span><br><span class="line">3123 HRegionServer</span><br><span class="line">2407 NodeManager</span><br><span class="line">1961 DataNode</span><br><span class="line">2298 ResourceManager</span><br><span class="line">3004 HMaster</span><br><span class="line">1852 NameNode</span><br><span class="line">2158 SecondaryNameNode</span><br><span class="line">2943 HQuorumPeer</span><br></pre></td></tr></table></figure><p>以上几个进程说明Hbase启动成功。</p><ul><li>4.Hbase操作    </li></ul><p>可以进入shell模式，通过命令行操作查看hbase数据库信息。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hbase shell    #进入shell模式</span><br><span class="line">list    # 查看当前数据库所有表信息</span><br><span class="line">describe &apos;member&apos;    # 查看表结构</span><br><span class="line"># 创建一个member表，其拥有member_id,address,info三个列族</span><br><span class="line">create &apos;member&apos;,&apos;member_id&apos;,&apos;address&apos;,&apos;info&apos;</span><br></pre></td></tr></table></figure><ul><li>5.查看HDFS的HBase数据库文件</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:～$ hadoop fs -ls /hbase</span><br><span class="line">17/10/28 20:45:14 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Found 6 items</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/.tmp</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/WALs</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/data</span><br><span class="line">-rw-r--r--   3 nova supergroup         42 2017-10-28 00:03 /hbase/hbase.id</span><br><span class="line">-rw-r--r--   3 nova supergroup          7 2017-10-28 00:03 /hbase/hbase.version</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:14 /hbase/oldWALs</span><br></pre></td></tr></table></figure><ul><li>6.停止HBase</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop-hbase.sh    #停止Hbase</span><br></pre></td></tr></table></figure><p>问题：停止hbase时，HRegionServer进程不能停止。会导致下次启动hbase时出错。</p><p>原因:</p><h3 id="HBase的用户界面"><a href="#HBase的用户界面" class="headerlink" title="HBase的用户界面"></a>HBase的用户界面</h3><ul><li>yarn: <a href="http://192.168.1.20:8088/cluster" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:8088/cluster</a></li><li><p>hdfs状态: <a href="http://192.168.1.20:50070/dfshealth.html#tab-overview" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:50070/dfshealth.html#tab-overview</a></p></li><li><p>Master: <a href="http://192.168.1.20:60010/master.jsp" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:60010/master.jsp</a></p></li></ul>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;启动hadoop&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line
+        &lt;p&gt;同Hadoop安装，到&lt;br&gt;&lt;a href=&quot;http://archive.cloudera.com/cdh5/cdh/5/&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;CDH版下载地址&lt;/a&gt;
       
     
     </summary>
@@ -533,35 +560,6 @@
       
       
         &lt;h2 id=&quot;Ubuntu&quot;&gt;&lt;a href=&quot;#Ubuntu&quot; class=&quot;headerlink&quot; title=&quot;Ubuntu&quot;&gt;&lt;/a&gt;Ubuntu&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://dev.aliyun.com/detail.html?spm=5176.1
-      
-    
-    </summary>
-    
-      <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
-    
-      <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Ubuntu16安装Docker环境</title>
-    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/1.Ubuntu16%E5%AE%89%E8%A3%85Docker%E7%8E%AF%E5%A2%83/"/>
-    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/1.Ubuntu16安装Docker环境/</id>
-    <published>2018-12-12T03:55:57.000Z</published>
-    <updated>2019-02-24T02:28:03.900Z</updated>
-    
-    <content type="html"><![CDATA[<p>之前每次安装都是上网查查资料，每次待找半天。所以在这里总结下。首先Docker在Ubuntu下的安装分为以下几个步骤：</p><ul><li>添加Docker源</li><li>安装aufs驱动linux-image-extra</li><li>安装Docker</li><li>安装后的设置</li><li>Docker更新</li></ul><h2 id="添加Docker源"><a href="#添加Docker源" class="headerlink" title="添加Docker源"></a>添加Docker源</h2><p>解释一下。使用Ubuntu在命令行可以直接安装Docker，但是一般都是老一些的版本，而且下载缓慢。所以换Docker源很有必要。</p><p>具体操作如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line"># 增加CA证书</span><br><span class="line">sudo apt-get install apt-transport-https ca-certificates</span><br><span class="line"># 添加GPG Key(一种加密手段)</span><br><span class="line">sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D</span><br><span class="line"># 添加docker的源</span><br><span class="line">echo &quot;deb https://apt.dockerproject.org/repo ubuntu-xenial main&quot;  &gt; /etc/apt/sources.list.d/docker.list</span><br><span class="line">或</span><br><span class="line">echo &quot;deb https://apt.dockerproject.org/repo ubuntu-xenial main&quot; | sudo tee /etc/apt/sources.list.d/docker.list</span><br><span class="line"># 再次更新源</span><br><span class="line">sudo apt-get update</span><br><span class="line"># 清除过时源（以防万一）</span><br><span class="line">sudo apt-get purge lxc-docker</span><br><span class="line"># 验证APT是从正确的库源下载应用</span><br><span class="line">apt-cache policy docker-engine</span><br></pre></td></tr></table></figure><h2 id="安装aufs驱动linux-image-extra"><a href="#安装aufs驱动linux-image-extra" class="headerlink" title="安装aufs驱动linux-image-extra"></a>安装aufs驱动linux-image-extra</h2><p>For Ubuntu Trusty, Wily, and Xenial, it’s recommended to install the linux-image-extra kernel package. The linux-image-extra package allows you use the aufs storage driver可以实现容器间可执行文件和运行库的共享。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install linux-image-extra-$(uname -r)</span><br></pre></td></tr></table></figure><h2 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install docker-engine</span><br></pre></td></tr></table></figure><h2 id="安装后的设置"><a href="#安装后的设置" class="headerlink" title="安装后的设置"></a>安装后的设置</h2><p>将用户添加到docker组中，避免每次都是用sudo。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker $&#123;user&#125;</span><br></pre></td></tr></table></figure><h2 id="Docker更新"><a href="#Docker更新" class="headerlink" title="Docker更新"></a>Docker更新</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 更新Docker</span><br><span class="line">sudo apt-get upgrade docker-engine</span><br><span class="line"># 卸载Docker</span><br><span class="line">sudo apt-get purge docker-engine</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;之前每次安装都是上网查查资料，每次待找半天。所以在这里总结下。首先Docker在Ubuntu下的安装分为以下几个步骤：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;添加Docker源&lt;/li&gt;
-&lt;li&gt;安装aufs驱动linux-image-extra&lt;/li&gt;
-&lt;li&gt;安装Docker&lt;/
       
     
     </summary>
