@@ -6,7 +6,7 @@
   <link href="/wiki/atom.xml" rel="self"/>
   
   <link href="http://wiki.quartz.ren/"/>
-  <updated>2019-03-03T09:48:36.771Z</updated>
+  <updated>2019-03-06T16:57:26.947Z</updated>
   <id>http://wiki.quartz.ren/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>FastText</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/NLP/FastText/"/>
+    <id>http://wiki.quartz.ren/wiki/机器学习/NLP/FastText/</id>
+    <published>2019-03-06T14:55:57.000Z</published>
+    <updated>2019-03-06T16:57:26.947Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="ngram"><a href="#ngram" class="headerlink" title="ngram"></a>ngram</h3><p>fastText可以在词向量的训练和句子分类上取得非常好的表现，尤其表现在对罕见词进行字符粒度上的处理。</p><p>每个单词除了单词本身外还被表示为多个字符级别的n-grams(有时候也称为N元模子)</p><p>例如对于单词  <strong>matter</strong>.</p><p>当n=3时， fasttext对该词对字符ngram就表示为  </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;ma, mat, att, tte, ter, er&gt;</span><br></pre></td></tr></table></figure><p>其中&lt; 和 &gt; 是作为边界符号被添加，来将一个单词的ngrams与单词本身区分开来。</p><blockquote><p>再举一个例子，如果单词mat属于我们的词汇表，则会被表示为<mat> . 这么做刚好让一些短词以其他词的ngram出现，有助于更好的学习到这些短词的含义。</mat></p></blockquote><p>从本质上讲，这可以帮助你捕捉后缀/前缀的含义。</p><h3 id="minn-maxn"><a href="#minn-maxn" class="headerlink" title="minn,maxn"></a>minn,maxn</h3><p>可以通过-minn和-maxn这两个参数来控制ngrams的长度，这两个标志分别决定了<strong>ngrams的最小和最大字符数</strong>，也即控制了ngrams的范围。</p><p>这个模型被认为是一个词袋模型，因为除了用于选择n-gram的滑动窗口外,它并没有考虑对单词的内部结构进行特征选择。</p><blockquote><p>它只要求字符落在窗口以内，但并不关心ngrams的顺序。</p></blockquote><p>你可以将这两个值都设为0来完全关闭n-gram. 也就是不产生n-gram符号，单纯用单词作为输入.</p><p>当您的模型中的“单词”不是特定语音的单词时或者说字符级别的n-gram没有意义的时候，这会变得很有用。最常见的例子是当您将id作为您的单词输入。</p><p>在模型更新期间，fastText会学习到每个ngram以及整个单词符号的权重。</p><h3 id="读取数据"><a href="#读取数据" class="headerlink" title="读取数据"></a>读取数据</h3><p>虽然fastText的训练是多线程的，但是读取数据却是通过单线程来完成。而文本解析和分词则在读取输入数据时就被完成了。让我们来看看具体是怎么做到的:</p><p>FastText通过-input参数获取一个文件句柄用于输入数据。FastText不支持从stdin读取数据，它初始化两个向量word2int_和words_来跟踪输入信息。</p><p>word2int_是一个字符串到数值的映射集，索引键是单词字符串，根据字符串哈希值可以得到一个数值作为它的值，同时这个数值恰好就对应到了words_数组(std:::vector)的索引。</p><p>words_数组在读取输入时根据单词出现的顺序递增创建索引，每个索引对应的值是一个结构体entry，这个entry封装了单词的所有信息。条目包含以下信息:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct entry &#123;</span><br><span class="line">std::string word;</span><br><span class="line">int64_t count;</span><br><span class="line">entry_type type;</span><br><span class="line">std::vector&lt;int32_t&gt; subwords;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p><a href="https://baijiahao.baidu.com/s?id=1606667200878009384&amp;wfr=spider&amp;for=pc" rel="external nofollow noopener noreferrer" target="_blank">https://baijiahao.baidu.com/s?id=1606667200878009384&amp;wfr=spider&amp;for=pc</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;ngram&quot;&gt;&lt;a href=&quot;#ngram&quot; class=&quot;headerlink&quot; title=&quot;ngram&quot;&gt;&lt;/a&gt;ngram&lt;/h3&gt;&lt;p&gt;fastText可以在词向量的训练和句子分类上取得非常好的表现，尤其表现在对罕见词进行字符粒度上的处理。&lt;/p&gt;
+&lt;
+      
+    
+    </summary>
+    
+      <category term="机器学习" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="NLP" scheme="http://wiki.quartz.ren/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/NLP/"/>
+    
+    
+      <category term="MchineLearning" scheme="http://wiki.quartz.ren/tags/MchineLearning/"/>
+    
+  </entry>
   
   <entry>
     <title>简单线性回归实现</title>
@@ -98,6 +126,33 @@
   </entry>
   
   <entry>
+    <title>201902</title>
+    <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/201902/"/>
+    <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/201902/</id>
+    <published>2019-02-24T01:56:24.000Z</published>
+    <updated>2019-02-24T10:06:33.273Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="20190224"><a href="#20190224" class="headerlink" title="20190224"></a>20190224</h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;20190224&quot;&gt;&lt;a href=&quot;#20190224&quot; class=&quot;headerlink&quot; title=&quot;20190224&quot;&gt;&lt;/a&gt;20190224&lt;/h3&gt;
+      
+    
+    </summary>
+    
+      <category term="生活学习" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="TODOLIST" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/"/>
+    
+    
+      <category term="todo" scheme="http://wiki.quartz.ren/tags/todo/"/>
+    
+  </entry>
+  
+  <entry>
     <title>TODOLIST</title>
     <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/README/"/>
     <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/README/</id>
@@ -115,33 +170,6 @@
 &lt;li&gt;一篇英语文章&lt;/li&gt;
 &lt;li&gt;一个技术小技巧&lt;/li&gt;
 &lt;li&gt;一个观点分享&lt;/
-      
-    
-    </summary>
-    
-      <category term="生活学习" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/"/>
-    
-      <category term="TODOLIST" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/"/>
-    
-    
-      <category term="todo" scheme="http://wiki.quartz.ren/tags/todo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>201902</title>
-    <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/201902/"/>
-    <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/201902/</id>
-    <published>2019-02-24T01:56:24.000Z</published>
-    <updated>2019-02-24T10:06:33.273Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="20190224"><a href="#20190224" class="headerlink" title="20190224"></a>20190224</h3>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;20190224&quot;&gt;&lt;a href=&quot;#20190224&quot; class=&quot;headerlink&quot; title=&quot;20190224&quot;&gt;&lt;/a&gt;20190224&lt;/h3&gt;
       
     
     </summary>
@@ -535,31 +563,6 @@
       
       
         &lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;l
-      
-    
-    </summary>
-    
-      <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
-    
-      <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>系统镜像</title>
-    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/7.%E7%B3%BB%E7%BB%9F%E9%95%9C%E5%83%8F/"/>
-    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/7.系统镜像/</id>
-    <published>2018-12-14T13:55:57.000Z</published>
-    <updated>2019-02-24T02:32:34.952Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h2><p><a href="https://dev.aliyun.com/detail.html?spm=5176.1971733.2.22.4884464bc4qgot&amp;repoId=1271" rel="external nofollow noopener noreferrer" target="_blank">镜像地址</a></p><ul><li>拉取镜像</li><li>启动镜像</li></ul><h3 id="在镜像中操作"><a href="#在镜像中操作" class="headerlink" title="在镜像中操作"></a>在镜像中操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -i -t ubuntu bash</span><br></pre></td></tr></table></figure><h2 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h2><h4 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull centos:6.8</span><br></pre></td></tr></table></figure><h4 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -ti --name centos001 centos:6.8  /bin/bash</span><br></pre></td></tr></table></figure><h4 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi 、 sshd</span><br><span class="line"></span><br><span class="line">yum install vi</span><br><span class="line"></span><br><span class="line">yum install openssh-server</span><br></pre></td></tr></table></figure><ul><li>查看是否启动</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/sshd status</span><br><span class="line"></span><br><span class="line">service sshd start</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;Ubuntu&quot;&gt;&lt;a href=&quot;#Ubuntu&quot; class=&quot;headerlink&quot; title=&quot;Ubuntu&quot;&gt;&lt;/a&gt;Ubuntu&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://dev.aliyun.com/detail.html?spm=5176.1
       
     
     </summary>

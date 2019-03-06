@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/NLP/FastText/</loc>
+    
+    <lastmod>2019-03-06T16:57:26.947Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0100%E5%A4%A9/002.%E7%AE%80%E5%8D%95%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%AE%9E%E7%8E%B0/</loc>
     
     <lastmod>2019-03-03T09:48:36.771Z</lastmod>
@@ -317,14 +324,14 @@
   </url>
   
   <url>
-    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/2.KNN/</loc>
+    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/3.Logistic%E5%9B%9E%E5%BD%92/</loc>
     
     <lastmod>2019-02-23T13:37:57.997Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/3.Logistic%E5%9B%9E%E5%BD%92/</loc>
+    <loc>http://wiki.quartz.ren/wiki/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/2.KNN/</loc>
     
     <lastmod>2019-02-23T13:37:57.997Z</lastmod>
     
