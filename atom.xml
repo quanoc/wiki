@@ -6,7 +6,7 @@
   <link href="/wiki/atom.xml" rel="self"/>
   
   <link href="http://wiki.quartz.ren/"/>
-  <updated>2019-03-06T16:57:26.947Z</updated>
+  <updated>2019-03-11T15:56:09.564Z</updated>
   <id>http://wiki.quartz.ren/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>函数式接口-FunctionalInterface</title>
+    <link href="http://wiki.quartz.ren/wiki/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/Java/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3-FunctionalInterface/"/>
+    <id>http://wiki.quartz.ren/wiki/程序语言/Java/函数式接口-FunctionalInterface/</id>
+    <published>2019-03-09T03:55:57.000Z</published>
+    <updated>2019-03-11T15:56:09.564Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="什么是函数式接口"><a href="#什么是函数式接口" class="headerlink" title="什么是函数式接口"></a>什么是函数式接口</h3><p>其实之前在讲Lambda表达式的时候提到过，所谓的函数式接口，当然首先是一个接口，然后就是在这个接口里面只能有一个抽象方法。</p><p>这种类型的接口也称为SAM接口，即Single Abstract Method interfaces。</p><p>###　用途<br>它们主要用在Lambda表达式和方法引用（实际上也可认为是Lambda表达式）上</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">GreetingService</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">sayMessage</span><span class="params">(String message)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>那么就可以使用Lambda表达式来表示该接口的一个实现(注：JAVA 8 之前一般是用匿名类实现的)：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GreetingService greetService1 = message -&gt; System.out.println(<span class="string">"Hello "</span> + message);</span><br></pre></td></tr></table></figure><h3 id="关于-FunctionalInterface注解"><a href="#关于-FunctionalInterface注解" class="headerlink" title="关于@FunctionalInterface注解"></a>关于@FunctionalInterface注解</h3><p>Java 8为函数式接口引入了一个新注解@FunctionalInterface，主要用于编译级错误检查，加上该注解，当你写的接口不符合函数式接口定义的时候，编译器会报错。</p><p>提醒：加不加@FunctionalInterface对于接口是不是函数式接口没有影响，该注解知识提醒编译器去检查该接口是否仅包含一个抽象方法</p><h3 id="函数式接口里允许定义默认方法"><a href="#函数式接口里允许定义默认方法" class="headerlink" title="函数式接口里允许定义默认方法"></a>函数式接口里允许定义默认方法</h3><p>函数式接口里是可以包含默认方法，因为默认方法不是抽象方法，其有一个默认实现，所以是符合函数式接口的定义的；</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">GreetingService</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">sayMessage</span><span class="params">(String message)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">doSomeMoreWork1</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// Method body</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">doSomeMoreWork2</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// Method body</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="JDK中的函数式接口举例"><a href="#JDK中的函数式接口举例" class="headerlink" title="JDK中的函数式接口举例"></a>JDK中的函数式接口举例</h3><p>java.lang.Runnable,<br>java.awt.event.ActionListener,<br>java.util.Comparator,<br>java.util.concurrent.Callable<br>java.util.function包下的接口，如Consumer、Predicate、Supplier等</p><p><a href="https://www.cnblogs.com/runningTurtle/p/7092632.html" rel="external nofollow noopener noreferrer" target="_blank">Java 8 函数式接口 - Functional Interface</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;什么是函数式接口&quot;&gt;&lt;a href=&quot;#什么是函数式接口&quot; class=&quot;headerlink&quot; title=&quot;什么是函数式接口&quot;&gt;&lt;/a&gt;什么是函数式接口&lt;/h3&gt;&lt;p&gt;其实之前在讲Lambda表达式的时候提到过，所谓的函数式接口，当然首先是一个接口，然后就是在
+      
+    
+    </summary>
+    
+      <category term="程序语言" scheme="http://wiki.quartz.ren/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/"/>
+    
+      <category term="Java" scheme="http://wiki.quartz.ren/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/Java/"/>
+    
+    
+      <category term="Java" scheme="http://wiki.quartz.ren/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Netty的NioEventLoop</title>
+    <link href="http://wiki.quartz.ren/wiki/MicroService/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/Netty/Netty%E7%9A%84NioEventLoop/"/>
+    <id>http://wiki.quartz.ren/wiki/MicroService/技术框架/Netty/Netty的NioEventLoop/</id>
+    <published>2019-03-08T17:13:34.000Z</published>
+    <updated>2019-03-16T10:50:43.877Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="NioEventLoop"><a href="#NioEventLoop" class="headerlink" title="NioEventLoop"></a>NioEventLoop</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public final class NioEventLoop extends SingleThreadEventLoop &#123;</span><br><span class="line">    private Selector selector;</span><br><span class="line">    private Selector unwrappedSelector;</span><br><span class="line">    private SelectedSelectionKeySet selectedKeys;</span><br><span class="line"></span><br><span class="line">    private final SelectorProvider provider;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Boolean that controls determines if a blocked Selector.select should</span><br><span class="line">     * break out of its selection process. In our case we use a timeout for</span><br><span class="line">     * the select method and the select method will block for that time unless</span><br><span class="line">     * waken up.</span><br><span class="line">     */</span><br><span class="line">    private final AtomicBoolean wakenUp = new AtomicBoolean();</span><br><span class="line"></span><br><span class="line">    private final SelectStrategy selectStrategy;</span><br><span class="line"></span><br><span class="line">    private volatile int ioRatio = 50;</span><br><span class="line">    private int cancelledKeys;</span><br><span class="line">    private boolean needsToSelectAgain;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>NioEventLoop 是Netty的核心类。</p><p>NioEventLoop 的首要职责就是为注册在它上的 channels 服务，发现这些 channels 上发生的新连接事件、读写等 I/O 事件，然后将事件转交 channel 流水线处理。</p><p><a href="https://www.jianshu.com/p/064a188b1803" rel="external nofollow noopener noreferrer" target="_blank">NioEventLoop 的职责</a></p><h3 id="发现策略"><a href="#发现策略" class="headerlink" title="发现策略"></a>发现策略</h3><p>SelectStrategy selectStrategy<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">final class DefaultSelectStrategy implements SelectStrategy &#123;</span><br><span class="line">    static final SelectStrategy INSTANCE = new DefaultSelectStrategy();</span><br><span class="line">    private DefaultSelectStrategy() &#123; &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public int calculateStrategy(IntSupplier selectSupplier, boolean hasTasks) throws Exception &#123;</span><br><span class="line">        return hasTasks ? selectSupplier.get() : SelectStrategy.SELECT;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;NioEventLoop&quot;&gt;&lt;a href=&quot;#NioEventLoop&quot; class=&quot;headerlink&quot; title=&quot;NioEventLoop&quot;&gt;&lt;/a&gt;NioEventLoop&lt;/h2&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;
+      
+    
+    </summary>
+    
+      <category term="MicroService" scheme="http://wiki.quartz.ren/categories/MicroService/"/>
+    
+      <category term="技术框架" scheme="http://wiki.quartz.ren/categories/MicroService/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/"/>
+    
+      <category term="Netty" scheme="http://wiki.quartz.ren/categories/MicroService/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/Netty/"/>
+    
+    
+      <category term="Netty" scheme="http://wiki.quartz.ren/tags/Netty/"/>
+    
+  </entry>
   
   <entry>
     <title>FastText</title>
@@ -126,33 +182,6 @@
   </entry>
   
   <entry>
-    <title>201902</title>
-    <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/201902/"/>
-    <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/201902/</id>
-    <published>2019-02-24T01:56:24.000Z</published>
-    <updated>2019-02-24T10:06:33.273Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="20190224"><a href="#20190224" class="headerlink" title="20190224"></a>20190224</h3>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;20190224&quot;&gt;&lt;a href=&quot;#20190224&quot; class=&quot;headerlink&quot; title=&quot;20190224&quot;&gt;&lt;/a&gt;20190224&lt;/h3&gt;
-      
-    
-    </summary>
-    
-      <category term="生活学习" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/"/>
-    
-      <category term="TODOLIST" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/"/>
-    
-    
-      <category term="todo" scheme="http://wiki.quartz.ren/tags/todo/"/>
-    
-  </entry>
-  
-  <entry>
     <title>TODOLIST</title>
     <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/README/"/>
     <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/README/</id>
@@ -170,6 +199,33 @@
 &lt;li&gt;一篇英语文章&lt;/li&gt;
 &lt;li&gt;一个技术小技巧&lt;/li&gt;
 &lt;li&gt;一个观点分享&lt;/
+      
+    
+    </summary>
+    
+      <category term="生活学习" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="TODOLIST" scheme="http://wiki.quartz.ren/categories/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/"/>
+    
+    
+      <category term="todo" scheme="http://wiki.quartz.ren/tags/todo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>201902</title>
+    <link href="http://wiki.quartz.ren/wiki/%E7%94%9F%E6%B4%BB%E5%AD%A6%E4%B9%A0/TODOLIST/201902/"/>
+    <id>http://wiki.quartz.ren/wiki/生活学习/TODOLIST/201902/</id>
+    <published>2019-02-24T01:56:24.000Z</published>
+    <updated>2019-02-24T10:06:33.273Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="20190224"><a href="#20190224" class="headerlink" title="20190224"></a>20190224</h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;20190224&quot;&gt;&lt;a href=&quot;#20190224&quot; class=&quot;headerlink&quot; title=&quot;20190224&quot;&gt;&lt;/a&gt;20190224&lt;/h3&gt;
       
     
     </summary>
@@ -270,21 +326,19 @@
   </entry>
   
   <entry>
-    <title>常用操作命令与问题记录</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/4.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E4%B8%8E%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
-    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/</id>
+    <title>HBase伪集群模式安装</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/3.HBase%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E5%AE%89%E8%A3%85/"/>
+    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/3.HBase伪集群模式安装/</id>
     <published>2019-02-16T04:56:24.000Z</published>
-    <updated>2019-02-24T02:21:51.913Z</updated>
+    <updated>2019-02-24T02:20:30.498Z</updated>
     
-    <content type="html"><![CDATA[<ul><li><p>启动hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-dfs.sh</span><br><span class="line">start-yarn.sh</span><br></pre></td></tr></table></figure></li><li><p>停止hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stop-dfs.sh</span><br><span class="line">stop-yarn.sh</span><br></pre></td></tr></table></figure></li></ul><blockquote><p>启动或停止所有，即：HDFS和Yarn</p></blockquote><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><h3 id="一、dfs的端口9000不通"><a href="#一、dfs的端口9000不通" class="headerlink" title="一、dfs的端口9000不通"></a>一、dfs的端口9000不通</h3><p>原因：忘记格式化hdfs。</p><p>启动顺序</p><ul><li>1.启动hdfs</li><li>2.启动yarn</li><li>3.启动hbase</li></ul><h3 id="二、查看hbase在hdfs中目录时"><a href="#二、查看hbase在hdfs中目录时" class="headerlink" title="二、查看hbase在hdfs中目录时"></a>二、查看hbase在hdfs中目录时</h3><p>使用hadoop fs -ls /hbase查看hbase目录，出现以下信息：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">17/10/28 22:25:28 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br></pre></td></tr></table></figure><ul><li>hbase 可以配置使用本地文件系统（一般单击模式），也可以使用hdfs（伪集群或集群模式）</li><li>hbase 可以配置使用自己安装的zk，也可以使用自带的zk。</li></ul><p>hadoop的name、data文件夹下存放什么？</p>]]></content>
+    <content type="html"><![CDATA[<p>同Hadoop安装，到<br><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a>下载hbase。选择 hbase-1.0.0-cdh5.4.0.tar.gz</p><blockquote><p>hbase伪分布式模式是基于hdfs环境的</p></blockquote><p>因此，在安装hadoop的前提下，我们配置Hbase的伪分布式模式如下：</p><ul><li>1.下载并解压</li><li>2.配置环境变量（可选）</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bashrc</span><br><span class="line">#添加</span><br><span class="line">export  PATH=$PATH:/opt/app/skyeye/hbase-1.0.0-cdh5.4.0/bin</span><br><span class="line">. ~/.bashrc</span><br><span class="line">#验证</span><br><span class="line">hbase version</span><br></pre></td></tr></table></figure><h3 id="伪集群模式配置"><a href="#伪集群模式配置" class="headerlink" title="伪集群模式配置"></a>伪集群模式配置</h3><ul><li>1.配置 conf/hbase-env.sh<br>将JAVA_HOME变量设置为本机jdk路径。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/tools/jdk1.8.0_131  #配置本机的java安装根目录</span><br><span class="line">export HBASE_MANAGES_ZK=true       #配置使用hbase自带的zookeeper，不使用自己搭建的zookeeper</span><br></pre></td></tr></table></figure><p>如果使用 export HBASE_MANAGES_ZK=true， 即配置不使用hbase自带的zookeeper，使用自己搭建的zookeeper</p><blockquote><p>hbase可以使用自定义zookeeper管理，也可以使用自带的zookeeper。</p></blockquote><ul><li>2.配置conf/hbase-site.xml<br>修改hbase.rootdir,将其指向hdfs，并指定Hbase在HDFS上的存储路径。<br>将hbase.cluster.distributed设置为true。<br>添加zk的节点地址。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line"> &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://localhost:9000/hbase&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"> &lt;!--以下信息只有在使用自己搭建的zk时添加--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">     &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</span><br><span class="line">     &lt;value&gt;cdhnode1,cdhnode2,cdhnode3&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">    &lt;!--默认为/tmp/目录下--&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/opt/app/skyeye/data/hbasetmp/&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure><ul><li>3.启动HBase</li></ul><p>完成上述操作之后，启动HBase，需要先启动Hadoop。</p><p>启动及检查：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:~$ start-all.sh </span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps</span><br><span class="line">9250 ResourceManager</span><br><span class="line">9683 Jps</span><br><span class="line">9365 NodeManager</span><br><span class="line">9110 SecondaryNameNode</span><br><span class="line">8935 DataNode</span><br><span class="line">8795 NameNode</span><br></pre></td></tr></table></figure><p>上述则Hadoop启动成功。</p><blockquote><p>当前版本。使用start-all.sh启动hadoop时会提示以下信息，所以建议分别启动hdfs和yarn。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This script is Deprecated. Instead use start-dfs.sh and start-yarn.sh</span><br></pre></td></tr></table></figure><p>之后启动HBase，启动及检查</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">start-hbase.sh          # 启动Hbase</span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps        # 检查</span><br><span class="line">3728 Jps</span><br><span class="line">3123 HRegionServer</span><br><span class="line">2407 NodeManager</span><br><span class="line">1961 DataNode</span><br><span class="line">2298 ResourceManager</span><br><span class="line">3004 HMaster</span><br><span class="line">1852 NameNode</span><br><span class="line">2158 SecondaryNameNode</span><br><span class="line">2943 HQuorumPeer</span><br></pre></td></tr></table></figure><p>以上几个进程说明Hbase启动成功。</p><ul><li>4.Hbase操作    </li></ul><p>可以进入shell模式，通过命令行操作查看hbase数据库信息。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hbase shell    #进入shell模式</span><br><span class="line">list    # 查看当前数据库所有表信息</span><br><span class="line">describe &apos;member&apos;    # 查看表结构</span><br><span class="line"># 创建一个member表，其拥有member_id,address,info三个列族</span><br><span class="line">create &apos;member&apos;,&apos;member_id&apos;,&apos;address&apos;,&apos;info&apos;</span><br></pre></td></tr></table></figure><ul><li>5.查看HDFS的HBase数据库文件</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:～$ hadoop fs -ls /hbase</span><br><span class="line">17/10/28 20:45:14 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Found 6 items</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/.tmp</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/WALs</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/data</span><br><span class="line">-rw-r--r--   3 nova supergroup         42 2017-10-28 00:03 /hbase/hbase.id</span><br><span class="line">-rw-r--r--   3 nova supergroup          7 2017-10-28 00:03 /hbase/hbase.version</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:14 /hbase/oldWALs</span><br></pre></td></tr></table></figure><ul><li>6.停止HBase</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop-hbase.sh    #停止Hbase</span><br></pre></td></tr></table></figure><p>问题：停止hbase时，HRegionServer进程不能停止。会导致下次启动hbase时出错。</p><p>原因:</p><h3 id="HBase的用户界面"><a href="#HBase的用户界面" class="headerlink" title="HBase的用户界面"></a>HBase的用户界面</h3><ul><li>yarn: <a href="http://192.168.1.20:8088/cluster" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:8088/cluster</a></li><li><p>hdfs状态: <a href="http://192.168.1.20:50070/dfshealth.html#tab-overview" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:50070/dfshealth.html#tab-overview</a></p></li><li><p>Master: <a href="http://192.168.1.20:60010/master.jsp" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:60010/master.jsp</a></p></li></ul>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;启动hadoop&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line
+        &lt;p&gt;同Hadoop安装，到&lt;br&gt;&lt;a href=&quot;http://archive.cloudera.com/cdh5/cdh/5/&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;CDH版下载地址&lt;/a&gt;
       
     
     </summary>
@@ -303,19 +357,21 @@
   </entry>
   
   <entry>
-    <title>HBase伪集群模式安装</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/3.HBase%E4%BC%AA%E9%9B%86%E7%BE%A4%E6%A8%A1%E5%BC%8F%E5%AE%89%E8%A3%85/"/>
-    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/3.HBase伪集群模式安装/</id>
+    <title>常用操作命令与问题记录</title>
+    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/Hadoop%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85/4.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E4%B8%8E%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+    <id>http://wiki.quartz.ren/wiki/数据处理/组件安装配置/Hadoop组件安装/4.常用操作与问题记录/</id>
     <published>2019-02-16T04:56:24.000Z</published>
-    <updated>2019-02-24T02:20:30.498Z</updated>
+    <updated>2019-02-24T02:21:51.913Z</updated>
     
-    <content type="html"><![CDATA[<p>同Hadoop安装，到<br><a href="http://archive.cloudera.com/cdh5/cdh/5/" rel="external nofollow noopener noreferrer" target="_blank">CDH版下载地址</a>下载hbase。选择 hbase-1.0.0-cdh5.4.0.tar.gz</p><blockquote><p>hbase伪分布式模式是基于hdfs环境的</p></blockquote><p>因此，在安装hadoop的前提下，我们配置Hbase的伪分布式模式如下：</p><ul><li>1.下载并解压</li><li>2.配置环境变量（可选）</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bashrc</span><br><span class="line">#添加</span><br><span class="line">export  PATH=$PATH:/opt/app/skyeye/hbase-1.0.0-cdh5.4.0/bin</span><br><span class="line">. ~/.bashrc</span><br><span class="line">#验证</span><br><span class="line">hbase version</span><br></pre></td></tr></table></figure><h3 id="伪集群模式配置"><a href="#伪集群模式配置" class="headerlink" title="伪集群模式配置"></a>伪集群模式配置</h3><ul><li>1.配置 conf/hbase-env.sh<br>将JAVA_HOME变量设置为本机jdk路径。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/opt/tools/jdk1.8.0_131  #配置本机的java安装根目录</span><br><span class="line">export HBASE_MANAGES_ZK=true       #配置使用hbase自带的zookeeper，不使用自己搭建的zookeeper</span><br></pre></td></tr></table></figure><p>如果使用 export HBASE_MANAGES_ZK=true， 即配置不使用hbase自带的zookeeper，使用自己搭建的zookeeper</p><blockquote><p>hbase可以使用自定义zookeeper管理，也可以使用自带的zookeeper。</p></blockquote><ul><li>2.配置conf/hbase-site.xml<br>修改hbase.rootdir,将其指向hdfs，并指定Hbase在HDFS上的存储路径。<br>将hbase.cluster.distributed设置为true。<br>添加zk的节点地址。如下：</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line"> &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://localhost:9000/hbase&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"> &lt;!--以下信息只有在使用自己搭建的zk时添加--&gt;</span><br><span class="line">  &lt;property&gt;</span><br><span class="line">     &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</span><br><span class="line">     &lt;value&gt;cdhnode1,cdhnode2,cdhnode3&lt;/value&gt;</span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">    &lt;!--默认为/tmp/目录下--&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.tmp.dir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;/opt/app/skyeye/data/hbasetmp/&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure><ul><li>3.启动HBase</li></ul><p>完成上述操作之后，启动HBase，需要先启动Hadoop。</p><p>启动及检查：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:~$ start-all.sh </span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps</span><br><span class="line">9250 ResourceManager</span><br><span class="line">9683 Jps</span><br><span class="line">9365 NodeManager</span><br><span class="line">9110 SecondaryNameNode</span><br><span class="line">8935 DataNode</span><br><span class="line">8795 NameNode</span><br></pre></td></tr></table></figure><p>上述则Hadoop启动成功。</p><blockquote><p>当前版本。使用start-all.sh启动hadoop时会提示以下信息，所以建议分别启动hdfs和yarn。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This script is Deprecated. Instead use start-dfs.sh and start-yarn.sh</span><br></pre></td></tr></table></figure><p>之后启动HBase，启动及检查</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">start-hbase.sh          # 启动Hbase</span><br><span class="line"></span><br><span class="line">zbm@node3:~$ jps        # 检查</span><br><span class="line">3728 Jps</span><br><span class="line">3123 HRegionServer</span><br><span class="line">2407 NodeManager</span><br><span class="line">1961 DataNode</span><br><span class="line">2298 ResourceManager</span><br><span class="line">3004 HMaster</span><br><span class="line">1852 NameNode</span><br><span class="line">2158 SecondaryNameNode</span><br><span class="line">2943 HQuorumPeer</span><br></pre></td></tr></table></figure><p>以上几个进程说明Hbase启动成功。</p><ul><li>4.Hbase操作    </li></ul><p>可以进入shell模式，通过命令行操作查看hbase数据库信息。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hbase shell    #进入shell模式</span><br><span class="line">list    # 查看当前数据库所有表信息</span><br><span class="line">describe &apos;member&apos;    # 查看表结构</span><br><span class="line"># 创建一个member表，其拥有member_id,address,info三个列族</span><br><span class="line">create &apos;member&apos;,&apos;member_id&apos;,&apos;address&apos;,&apos;info&apos;</span><br></pre></td></tr></table></figure><ul><li>5.查看HDFS的HBase数据库文件</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zbm@node3:～$ hadoop fs -ls /hbase</span><br><span class="line">17/10/28 20:45:14 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">Found 6 items</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/.tmp</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/WALs</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:03 /hbase/data</span><br><span class="line">-rw-r--r--   3 nova supergroup         42 2017-10-28 00:03 /hbase/hbase.id</span><br><span class="line">-rw-r--r--   3 nova supergroup          7 2017-10-28 00:03 /hbase/hbase.version</span><br><span class="line">drwxr-xr-x   - nova supergroup          0 2017-10-28 00:14 /hbase/oldWALs</span><br></pre></td></tr></table></figure><ul><li>6.停止HBase</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop-hbase.sh    #停止Hbase</span><br></pre></td></tr></table></figure><p>问题：停止hbase时，HRegionServer进程不能停止。会导致下次启动hbase时出错。</p><p>原因:</p><h3 id="HBase的用户界面"><a href="#HBase的用户界面" class="headerlink" title="HBase的用户界面"></a>HBase的用户界面</h3><ul><li>yarn: <a href="http://192.168.1.20:8088/cluster" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:8088/cluster</a></li><li><p>hdfs状态: <a href="http://192.168.1.20:50070/dfshealth.html#tab-overview" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:50070/dfshealth.html#tab-overview</a></p></li><li><p>Master: <a href="http://192.168.1.20:60010/master.jsp" rel="external nofollow noopener noreferrer" target="_blank">http://192.168.1.20:60010/master.jsp</a></p></li></ul>]]></content>
+    <content type="html"><![CDATA[<ul><li><p>启动hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start-dfs.sh</span><br><span class="line">start-yarn.sh</span><br></pre></td></tr></table></figure></li><li><p>停止hadoop</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stop-dfs.sh</span><br><span class="line">stop-yarn.sh</span><br></pre></td></tr></table></figure></li></ul><blockquote><p>启动或停止所有，即：HDFS和Yarn</p></blockquote><h2 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h2><h3 id="一、dfs的端口9000不通"><a href="#一、dfs的端口9000不通" class="headerlink" title="一、dfs的端口9000不通"></a>一、dfs的端口9000不通</h3><p>原因：忘记格式化hdfs。</p><p>启动顺序</p><ul><li>1.启动hdfs</li><li>2.启动yarn</li><li>3.启动hbase</li></ul><h3 id="二、查看hbase在hdfs中目录时"><a href="#二、查看hbase在hdfs中目录时" class="headerlink" title="二、查看hbase在hdfs中目录时"></a>二、查看hbase在hdfs中目录时</h3><p>使用hadoop fs -ls /hbase查看hbase目录，出现以下信息：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">17/10/28 22:25:28 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br></pre></td></tr></table></figure><ul><li>hbase 可以配置使用本地文件系统（一般单击模式），也可以使用hdfs（伪集群或集群模式）</li><li>hbase 可以配置使用自己安装的zk，也可以使用自带的zk。</li></ul><p>hadoop的name、data文件夹下存放什么？</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;同Hadoop安装，到&lt;br&gt;&lt;a href=&quot;http://archive.cloudera.com/cdh5/cdh/5/&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;CDH版下载地址&lt;/a&gt;
+        &lt;ul&gt;
+&lt;li&gt;&lt;p&gt;启动hadoop&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line
       
     
     </summary>
@@ -517,59 +573,6 @@
       <category term="DataStore" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/DataStore/"/>
     
       <category term="Elasticsearch" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/DataStore/Elasticsearch/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Redis常用操作</title>
-    <link href="http://wiki.quartz.ren/wiki/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/DataStore/Redis/Redis%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/"/>
-    <id>http://wiki.quartz.ren/wiki/数据处理/DataStore/Redis/Redis常用操作/</id>
-    <published>2018-12-14T17:55:57.000Z</published>
-    <updated>2019-02-23T13:37:57.993Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="https://www.w3cschool.cn/redis_all_about/" rel="external nofollow noopener noreferrer" target="_blank">Redis开发运维实践指南</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;https://www.w3cschool.cn/redis_all_about/&quot; rel=&quot;external nofollow noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Redis开发运维实践指南&lt;/a&gt;&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-      <category term="数据处理" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"/>
-    
-      <category term="DataStore" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/DataStore/"/>
-    
-      <category term="Redis" scheme="http://wiki.quartz.ren/categories/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/DataStore/Redis/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Docker 仓库搭建</title>
-    <link href="http://wiki.quartz.ren/wiki/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/5.Docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/"/>
-    <id>http://wiki.quartz.ren/wiki/工具组件/Docker/5.Docker镜像仓库搭建/</id>
-    <published>2018-12-14T13:55:57.000Z</published>
-    <updated>2019-02-23T13:37:57.985Z</updated>
-    
-    <content type="html"><![CDATA[<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/data/registry  //创建目录</span><br><span class="line"></span><br><span class="line">docker run -d \</span><br><span class="line">  -p 5000:5000 \</span><br><span class="line">  --restart=always \</span><br><span class="line">  --name docker-registry \</span><br><span class="line">  -v /data/docker-registry:/var/lib/registry \</span><br><span class="line">  registry:2</span><br><span class="line">-d : 让容器可以后台运行</span><br><span class="line">-p ：指定映射端口（前者是宿主机的端口号，后者是容器的端口号）</span><br><span class="line">-v ：数据挂载（前者是宿主机的目录，后者是容器的目录）</span><br><span class="line">--name : 为运行的容器命名</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;figure class=&quot;highlight sh&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;l
-      
-    
-    </summary>
-    
-      <category term="工具组件" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/"/>
-    
-      <category term="Docker" scheme="http://wiki.quartz.ren/categories/%E5%B7%A5%E5%85%B7%E7%BB%84%E4%BB%B6/Docker/"/>
     
     
   </entry>
